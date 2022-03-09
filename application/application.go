@@ -2,14 +2,14 @@ package application
 
 import "sync"
 
-var BizCardService2 BizCardService
+var BizCardServiceBean BizCardService
 var once sync.Once
 
 func SetupBizCardService() BizCardService {
 	once.Do(func() {
-		if BizCardService2 == nil {
-			BizCardService2 = new(BizCardServiceImpl)
+		if BizCardServiceBean == nil {
+			BizCardServiceBean = new(BizCardServiceImpl)
 		}
 	})
-	return BizCardService2
+	return BizCardServiceBean
 }
