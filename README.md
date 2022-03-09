@@ -6,6 +6,8 @@
 - docker run을 해준다.
 - 간단한 api를 던져본다.
 ### 기술 스택
-- gin gonic
+- gin gonic ("github.com/gin-gonic/gin")
+- assert ("github.com/stretchr/testify/assert")
+- httpexpect ("github.com/gin-gonic/gin")
 - mysql
 - docker
