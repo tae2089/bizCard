@@ -15,3 +15,18 @@ func CreateBizCardInfo(dto BizCard) BizCardInfo {
 		age:         dto.Age(),
 	}
 }
+func (b *BizCardInfo) Name() string {
+	return b.name
+}
+
+func (b *BizCardInfo) PhoneNumber() string {
+	return b.phoneNumber
+}
+
+func (b *BizCardInfo) Email() string {
+	return b.email
+}
+
+func (b *BizCardInfo) Age() int {
+	return b.age
+}
