@@ -7,7 +7,7 @@ type BizCard struct {
 	age         int
 }
 
-func CreateBizCard(dto BizCardDto) BizCard {
+func CreateBizCard(dto BizCardRegister) BizCard {
 	return BizCard{
 		name:        dto.Name,
 		phoneNumber: dto.PhoneNumber,
