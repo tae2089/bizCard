@@ -1,4 +1,4 @@
-package application_test
+package test
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestBizCardServiceImpl_RegisterBizCard(t *testing.T) {
-	bizCardDto := domain.BizCardDto{
+	bizCardDto := domain.BizCardRegister{
 		Email:       "tae2089",
 		Name:        "taebin",
 		PhoneNumber: "010-xxxx-xxxx",
@@ -16,5 +16,5 @@ func TestBizCardServiceImpl_RegisterBizCard(t *testing.T) {
 	}
 	a := application.BizCardServiceImpl{}
 	result := a.RegisterBizCard(bizCardDto)
-	assert.Equal(t, "tae2089", result.Email())
+	assert.Equal(t, "tae2089", result.Email)
 }
