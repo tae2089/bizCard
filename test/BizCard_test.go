@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateBizCard(t *testing.T) {
-	bizCardDto := domain2.BizCardDto{Email: "tae2089", Name: "taebin", PhoneNumber: "010-xxxx-xxxx", Age: 12}
+	bizCardDto := domain2.BizCardRegister{Email: "tae2089", Name: "taebin", PhoneNumber: "010-xxxx-xxxx", Age: 12}
 	bizCard := domain2.CreateBizCard(bizCardDto)
 	assert.Equal(t, "taebin", bizCard.Name(), "not same name")
 	assert.Equal(t, "tae2089", bizCard.Email())
