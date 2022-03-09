@@ -1,32 +1,17 @@
 package domain
 
 type BizCardInfo struct {
-	name        string
-	phoneNumber string
-	email       string
-	age         int
+	Name        string `form:"name" json:"name" `
+	PhoneNumber string `form:"phoneNumber" json:"phoneNumber"`
+	Email       string `form:"email" json:"email"  `
+	Age         int    `form:"age"  json:"age" `
 }
 
 func CreateBizCardInfo(dto BizCard) BizCardInfo {
 	return BizCardInfo{
-		name:        dto.Name(),
-		phoneNumber: dto.PhoneNumber(),
-		email:       dto.Email(),
-		age:         dto.Age(),
+		Name:        dto.Name(),
+		PhoneNumber: dto.PhoneNumber(),
+		Email:       dto.Email(),
+		Age:         dto.Age(),
 	}
-}
-func (b *BizCardInfo) Name() string {
-	return b.name
-}
-
-func (b *BizCardInfo) PhoneNumber() string {
-	return b.phoneNumber
-}
-
-func (b *BizCardInfo) Email() string {
-	return b.email
-}
-
-func (b *BizCardInfo) Age() int {
-	return b.age
 }
