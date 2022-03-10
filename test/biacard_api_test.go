@@ -27,6 +27,11 @@ func TestRegisterBizCard(t *testing.T) {
 		"age":         25,
 	}
 
-	e.POST("/register").WithHeader("Content-Type", "application/json").WithJSON(data).Expect().JSON().Object().ContainsKey("name").ValueEqual("name", "taebin")
-
+	e.POST("/register").
+		WithHeader("Content-Type", "application/json").
+		WithJSON(data).Expect().
+		JSON().
+		Object().
+		ContainsKey("name").
+		ValueEqual("name", "taebin")
 }
