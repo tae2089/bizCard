@@ -3,10 +3,10 @@
 package ent
 
 import (
+	"bizCard/ent/bizcard"
 	"context"
 	"errors"
 	"fmt"
-	"main/ent/bizcard"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

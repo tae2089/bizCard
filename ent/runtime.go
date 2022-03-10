@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"main/ent/bizcard"
-	"main/ent/schema"
+	"bizCard/ent/bizcard"
+	"bizCard/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

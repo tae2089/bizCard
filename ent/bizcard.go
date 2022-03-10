@@ -3,8 +3,8 @@
 package ent
 
 import (
+	"bizCard/ent/bizcard"
 	"fmt"
-	"main/ent/bizcard"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"

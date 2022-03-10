@@ -3,7 +3,7 @@
 package bizcard
 
 import (
-	"main/ent/predicate"
+	"bizCard/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 )

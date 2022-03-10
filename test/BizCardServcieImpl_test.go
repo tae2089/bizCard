@@ -1,9 +1,9 @@
 package test
 
 import (
+	"bizCard/application"
+	domain "bizCard/domain"
 	"github.com/stretchr/testify/assert"
-	"main/application"
-	domain "main/domain"
 	"testing"
 )
 
@@ -16,5 +16,5 @@ func TestBizCardServiceImpl_RegisterBizCard(t *testing.T) {
 	}
 	a := application.BizCardServiceImpl{}
 	result := a.RegisterBizCard(bizCardDto)
-	assert.Equal(t, "tae2089", result.Email)
+	assert.Equal(t, "tae2089", result)
 }

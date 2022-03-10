@@ -1,8 +1,8 @@
 package test
 
 import (
+	"bizCard/router"
 	"github.com/gavv/httpexpect"
-	"main/router"
 	"net/http"
 	"testing"
 )

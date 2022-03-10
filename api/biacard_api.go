@@ -1,10 +1,10 @@
 package api
 
 import (
+	"bizCard/application"
+	"bizCard/domain"
 	"github.com/gin-gonic/gin"
 	"log"
-	"main/application"
-	"main/domain"
 	"net/http"
 )
 

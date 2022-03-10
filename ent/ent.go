@@ -3,9 +3,9 @@
 package ent
 
 import (
+	"bizCard/ent/bizcard"
 	"errors"
 	"fmt"
-	"main/ent/bizcard"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
