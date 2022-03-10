@@ -6,10 +6,10 @@ var BizCardServiceBean BizCardService
 var once sync.Once
 
 func SetupBizCardService() BizCardService {
-	once.Do(func() {
-		if BizCardServiceBean == nil {
+	if BizCardServiceBean == nil {
+		once.Do(func() {
 			BizCardServiceBean = new(BizCardServiceImpl)
-		}
-	})
+		})
+	}
 	return BizCardServiceBean
 }
