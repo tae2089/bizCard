@@ -10,7 +10,7 @@ type BizCardRepositoryImpl struct {
 	Client *ent.BizCardClient
 }
 
-func (b *BizCardRepositoryImpl) RegisterBizCard(dto domain.BizCardRegister) (*ent.BizCard, error) {
+func (b *BizCardRepositoryImpl) RegisterBizCard(dto *domain.BizCardRegister) (*ent.BizCard, error) {
 	savedBizCard, err := b.Client.
 		Create().
 		SetAge(dto.Age).

@@ -8,8 +8,9 @@ import (
 
 var bizCardRepositoryOnce sync.Once
 
+//go:generate mockery --name BizCardRepository --case underscore --inpackage
 type BizCardRepository interface {
-	RegisterBizCard(dto domain.BizCardRegister) (*ent.BizCard, error)
+	RegisterBizCard(dto *domain.BizCardRegister) (*ent.BizCard, error)
 }
 
 func SetupBizCardRepository() BizCardRepository {
