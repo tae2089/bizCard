@@ -15,7 +15,7 @@ func RegisterBizCard(c *gin.Context) {
 		return
 	}
 	log.Println("111", dto)
-	result := application.BizCardServiceBean.RegisterBizCard(dto)
+	result := application.BizCardServiceBean.RegisterBizCard(&dto)
 	log.Println("d", result)
 
 	c.JSON(http.StatusOK, result)
