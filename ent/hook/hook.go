@@ -3,9 +3,9 @@
 package hook
 
 import (
+	"bizCard/ent"
 	"context"
 	"fmt"
-	"main/ent"
 )
 
 // The BizCardFunc type is an adapter to allow the use of ordinary

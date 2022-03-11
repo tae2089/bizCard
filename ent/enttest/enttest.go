@@ -3,10 +3,10 @@
 package enttest
 
 import (
+	"bizCard/ent"
 	"context"
-	"main/ent"
 	// required by schema hooks.
-	_ "main/ent/runtime"
+	_ "bizCard/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
 )
