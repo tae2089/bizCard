@@ -1,9 +1,10 @@
 package router
 
 import (
+	"bizCard/api"
+	"bizCard/application"
+	"bizCard/repository"
 	"github.com/gin-gonic/gin"
-	"main/api"
-	"main/application"
 	"net/http"
 )
 
@@ -20,10 +21,10 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	router.POST("/register", api.RegisterBizCard)
-	setupService()
 	return router
 }
 
-func setupService() {
+func SetupService() {
+	repository.RegisterRepositoryBeans()
 	application.SetupBizCardService()
 }
