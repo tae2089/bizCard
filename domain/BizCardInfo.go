@@ -9,7 +9,7 @@ type BizCardInfo struct {
 	Age         int    `form:"age"  json:"age" `
 }
 
-func CreateBizCardInfo(dto ent.BizCard) BizCardInfo {
+func CreateBizCardInfo(dto *ent.BizCard) BizCardInfo {
 	return BizCardInfo{
 		Name:        dto.Name,
 		PhoneNumber: dto.PhoneNumber,
