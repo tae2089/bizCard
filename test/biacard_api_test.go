@@ -1,13 +1,25 @@
 package test
 
 import (
+	"bizCard/application"
+	"bizCard/domain"
+	mockapp "bizCard/mock/application"
 	"bizCard/router"
 	"github.com/gavv/httpexpect"
+	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 )
 
 func TestRegisterBizCard(t *testing.T) {
+	bizCardService := mockapp.MockBizCardService{}
+	application.BizCardServiceBean = &bizCardService
+	bizCardService.On("RegisterBizCard", mock.Anything).Return(&domain.BizCardInfo{
+		Email:       "tae2089",
+		Name:        "taebin",
+		PhoneNumber: "010-xxxx-xxxx",
+		Age:         25,
+	})
 	handler := router.SetupRouter()
 	// Create httpexpect instance
 	e := httpexpect.WithConfig(httpexpect.Config{
