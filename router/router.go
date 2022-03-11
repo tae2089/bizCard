@@ -21,11 +21,10 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	router.POST("/register", api.RegisterBizCard)
-	setupService()
 	return router
 }
 
-func setupService() {
+func SetupService() {
 	repository.RegisterRepositoryBeans()
 	application.SetupBizCardService()
 }
