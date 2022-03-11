@@ -1,4 +1,4 @@
-package repository_test
+package test_test
 
 import (
 	"bizCard/repository"
