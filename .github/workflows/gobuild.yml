@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     services: # 서비스할 목록들 (ex. Redis, Postgresql ...)
       mysql: # 사용할 서비스 명
+        container
         image: mysql:5.7  # 사용할 서비스의 이미지(도커 개념 기반)
         env: # 사용할 서비스의 환경설정
           MYSQL_USER: test
@@ -25,13 +26,16 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+          --name container_mysql
     steps:
       - uses: actions/checkout@v2
 
       - name: docker port check
         run: docker ps
-      - name: print database;
-        run: docker exec -uroot -psecret -e "show databases;"
+        
+      - name: show database
+        run: docker exec container_mysql mysql -uroot -psecret -e "show databases;"
+
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
