@@ -47,3 +47,33 @@ func TestRegisterBizCard(t *testing.T) {
 		ContainsKey("name").
 		ValueEqual("name", "taebin")
 }
+
+func TestFindBizCard(t *testing.T) {
+	bizCardService := mockapp.MockBizCardService{}
+	application.BizCardServiceBean = &bizCardService
+	bizCardService.On("FindBizCard", mock.Anything).Return(&domain.BizCardInfo{
+		Email:       "tae2089",
+		Name:        "taebin",
+		PhoneNumber: "010-xxxx-xxxx",
+		Age:         25,
+	})
+	handler := router.SetupRouter()
+	// Create httpexpect instance
+	e := httpexpect.WithConfig(httpexpect.Config{
+		Client: &http.Client{
+			Transport: httpexpect.NewBinder(handler),
+			Jar:       httpexpect.NewJar(),
+		},
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+	e.GET("/1").
+		WithHeader("Content-Type", "application/json").
+		Expect().
+		JSON().
+		Object().
+		ContainsKey("name").
+		ValueEqual("name", "taebin")
+}

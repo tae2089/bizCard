@@ -28,3 +28,16 @@ func TestBizCardServiceImpl_RegisterBizCard(t *testing.T) {
 	result := bizCardService.RegisterBizCard(&bizCardDto)
 	assert.Equal(t, "tae2089", result.Email)
 }
+
+func TestBizCardRepositoryImpl_FindBIzCardByUid(t *testing.T) {
+	bizCardRepository := &mockrepo.MockBizCardRepository{}
+	bizCardService := &application.BizCardServiceImpl{BizCardRepository: bizCardRepository}
+	bizCardRepository.On("FindBIzCardByUid", mock.Anything).Return(&ent.BizCard{
+		Email:       "tae2089",
+		Name:        "taebin",
+		PhoneNumber: "010-xxxx-xxxx",
+		Age:         25,
+	}, nil)
+	result := bizCardService.FindBizCard(1)
+	assert.Equal(t, "tae2089", result.Email)
+}
