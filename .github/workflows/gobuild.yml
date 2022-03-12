@@ -27,13 +27,17 @@ jobs:
 #          --health-retries=3
     steps:
       - uses: actions/checkout@v2
+
       - name: docker compose start
         run: docker-compose -f "docker-compose.yml" up -d
 
-      - name: Sleep for 15s
+      - name: docker port check
+        run: docker ps
+
+      - name: Sleep for 30s
         uses: juliangruber/sleep-action@v1
         with:
-          time: 15s
+          time: 30s
 
       - name: Set up Go
         uses: actions/setup-go@v2
