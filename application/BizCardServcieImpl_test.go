@@ -1,4 +1,4 @@
-package test
+package application_test
 
 import (
 	"bizCard/application"
@@ -18,7 +18,7 @@ func TestBizCardServiceImpl_RegisterBizCard(t *testing.T) {
 		Age:         25,
 	}
 	bizCardRepository := &mockrepo.MockBizCardRepository{}
-	bizCardService := &application.BizCardServiceImpl{bizCardRepository}
+	bizCardService := &application.BizCardServiceImpl{BizCardRepository: bizCardRepository}
 	bizCardRepository.On("RegisterBizCard", mock.Anything).Return(&ent.BizCard{
 		Email:       "tae2089",
 		Name:        "taebin",
