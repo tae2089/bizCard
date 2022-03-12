@@ -30,10 +30,10 @@ jobs:
       - name: docker compose start
         run: docker-compose -f "docker-compose.yml" up -d
 
-    - name: Sleep for 15s
-      uses: juliangruber/sleep-action@v1
-      with:
-        time: 15s
+      - name: Sleep for 15s
+        uses: juliangruber/sleep-action@v1
+        with:
+          time: 15s
 
       - name: Set up Go
         uses: actions/setup-go@v2
