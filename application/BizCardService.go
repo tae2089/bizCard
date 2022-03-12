@@ -9,6 +9,7 @@ import (
 //go:generate mockery --name BizCardService --case underscore --inpackage
 type BizCardService interface {
 	RegisterBizCard(bizCardDto *domain.BizCardRegister) *domain.BizCardInfo
+	FindBizCard(uid int) *domain.BizCardInfo
 }
 
 var onceBizCardService sync.Once
