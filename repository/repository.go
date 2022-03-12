@@ -40,12 +40,10 @@ func RegisterRepositoryBeans() {
 	SetupBizCardRepository()
 }
 
-func CreateSchema() error {
+func CreateSchema() {
 	// Run the auto migration tool.
 	if err := Client.Schema.Create(context.Background()); err != nil {
-		log.Println("failed creating schema resources: %v", err)
 		Client.Close()
-		return err
+		panic(err)
 	}
-	return nil
 }
