@@ -14,6 +14,29 @@ type MockBizCardRepository struct {
 	mock.Mock
 }
 
+// FindBIzCardByUid provides a mock function with given fields: uid
+func (_m *MockBizCardRepository) FindBIzCardByUid(uid int) (*ent.BizCard, error) {
+	ret := _m.Called(uid)
+
+	var r0 *ent.BizCard
+	if rf, ok := ret.Get(0).(func(int) *ent.BizCard); ok {
+		r0 = rf(uid)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ent.BizCard)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(uid)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // RegisterBizCard provides a mock function with given fields: dto
 func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*ent.BizCard, error) {
 	ret := _m.Called(dto)

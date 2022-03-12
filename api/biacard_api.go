@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func RegisterBizCard(c *gin.Context) {
@@ -18,5 +19,16 @@ func RegisterBizCard(c *gin.Context) {
 	result := application.BizCardServiceBean.RegisterBizCard(&dto)
 	log.Println("d", result)
 
+	c.JSON(http.StatusOK, result)
+}
+
+func FindBizCard(c *gin.Context) {
+	uid := c.Param("uid")
+	intUid, err := strconv.Atoi(uid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	result := application.BizCardServiceBean.FindBizCard(intUid)
 	c.JSON(http.StatusOK, result)
 }

@@ -12,3 +12,6 @@ services:
       TZ: Asia/Seoul
     volumes:
       - ./mysql/datadir:/var/lib/mysql
+    command: >
+      mysql -uroot -psecret -e "CREATE DATBASE bizcardtest"
+      

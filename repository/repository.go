@@ -43,7 +43,7 @@ func RegisterRepositoryBeans() {
 func CreateSchema() {
 	// Run the auto migration tool.
 	if err := Client.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
 		Client.Close()
+		panic(err)
 	}
 }
