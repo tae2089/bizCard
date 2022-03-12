@@ -10,7 +10,9 @@ import (
 )
 
 func TestBizCardRepositoryImpl_FindBIzCardByUid(t *testing.T) {
+
 	client := enttest.Open(t, "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
+	client.Schema.Create(context.Background())
 	repo, err := client.BizCard.Query().Where(bizcard.ID(1)).First(context.Background())
 	if err != nil {
 		log.Println(err)
@@ -20,6 +22,7 @@ func TestBizCardRepositoryImpl_FindBIzCardByUid(t *testing.T) {
 
 func TestBizCardRepositoryImpl_RegisterBizCard(t *testing.T) {
 	client := enttest.Open(t, "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
+	client.Schema.Create(context.Background())
 	data, err := client.BizCard.Create().
 		SetAge(15).
 		SetName("taebin").
