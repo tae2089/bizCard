@@ -32,3 +32,19 @@ func FindBizCard(c *gin.Context) {
 	result := application.BizCardServiceBean.FindBizCard(intUid)
 	c.JSON(http.StatusOK, result)
 }
+
+func UpdateBizCard(c *gin.Context) {
+	uid := c.Param("uid")
+	intUid, err := strconv.Atoi(uid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	var update domain.BizCardUpdate
+	if err := c.ShouldBindJSON(&update); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	result := application.BizCardServiceBean.UpdateBizCard(intUid, &update)
+	c.JSON(http.StatusOK, result)
+}
