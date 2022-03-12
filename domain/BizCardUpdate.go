@@ -26,9 +26,6 @@ func (b *BizCardUpdate) Update(dto *BizCardUpdate) *BizCardUpdate {
 	e := reflect.ValueOf(dto).Elem()
 	for i := 0; i < e.NumField(); i++ {
 		dtoName := e.Type().Field(i).Name
-		log.Println(dtoName)
-		log.Println(reflect.ValueOf(b).Elem().FieldByName(dtoName).Interface())
-		log.Println(reflect.ValueOf(dto).Elem().FieldByName(dtoName).Interface())
 		if reflect.ValueOf(dto).Elem().FieldByName(dtoName).Interface() != nil && reflect.ValueOf(dto).Elem().FieldByName(dtoName).Interface() != "" && reflect.ValueOf(dto).Elem().FieldByName(dtoName).Interface() != 0 {
 			reflect.ValueOf(b).Elem().FieldByName(dtoName).Set(reflect.ValueOf(dto).Elem().FieldByName(dtoName))
 		}
