@@ -3,6 +3,7 @@ package repository
 import (
 	"bizCard/domain"
 	"bizCard/ent"
+	"bizCard/ent/bizcard"
 	"context"
 )
 
@@ -22,4 +23,9 @@ func (b *BizCardRepositoryImpl) RegisterBizCard(dto *domain.BizCardRegister) (*e
 		return nil, err
 	}
 	return savedBizCard, nil
+}
+
+func (b *BizCardRepositoryImpl) FindBIzCardByUid(uid int) (*ent.BizCard, error) {
+	bizCard, err := b.Client.Query().Where(bizcard.ID(uid)).First(context.Background())
+	return bizCard, err
 }
