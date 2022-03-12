@@ -59,3 +59,26 @@ func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*
 
 	return r0, r1
 }
+
+// UpdateBizCard provides a mock function with given fields: findBizCard, dto
+func (_m *MockBizCardRepository) UpdateBizCard(findBizCard *ent.BizCard, dto *domain.BizCardUpdate) (*ent.BizCard, error) {
+	ret := _m.Called(findBizCard, dto)
+
+	var r0 *ent.BizCard
+	if rf, ok := ret.Get(0).(func(*ent.BizCard, *domain.BizCardUpdate) *ent.BizCard); ok {
+		r0 = rf(findBizCard, dto)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ent.BizCard)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*ent.BizCard, *domain.BizCardUpdate) error); ok {
+		r1 = rf(findBizCard, dto)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
