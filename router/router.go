@@ -15,6 +15,7 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	router.POST("/register", api.RegisterBizCard)
+	router.GET("/:uid", api.FindBizCard)
 	return router
 }
 
