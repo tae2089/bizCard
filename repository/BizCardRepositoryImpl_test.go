@@ -1,18 +1,25 @@
 package repository_test
 
 import (
+	"bizCard/ent"
 	"bizCard/ent/bizcard"
 	"bizCard/ent/enttest"
 	"context"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 	"log"
 	"testing"
 )
 
-func TestBizCardRepositoryImpl_RegisterBizCard(t *testing.T) {
-	client := enttest.Open(t, "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
-	client.Schema.Create(context.Background())
-	data, err := client.BizCard.Create().
+type BizCardRepositoryTestSuite struct {
+	suite.Suite
+	Client *ent.Client
+}
+
+func (ets *BizCardRepositoryTestSuite) SetupTest() {
+	ets.Client = enttest.Open(ets.T(), "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
+}
+func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_1_RegisterBizCard() {
+	data, err := ets.Client.BizCard.Create().
 		SetAge(15).
 		SetName("taebin").
 		SetEmail("tae2089").
@@ -21,14 +28,30 @@ func TestBizCardRepositoryImpl_RegisterBizCard(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	assert.Equal(t, 15, data.Age)
+	ets.Equal(15, data.Age)
 }
-func TestBizCardRepositoryImpl_FindBIzCardByUid(t *testing.T) {
-	client := enttest.Open(t, "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
-	client.Schema.Create(context.Background())
-	repo, err := client.BizCard.Query().Where(bizcard.ID(1)).First(context.Background())
+func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_2_FindBIzCardByUid() {
+	repo, err := ets.Client.BizCard.Query().Where(bizcard.ID(1)).First(context.Background())
 	if err != nil {
-		log.Println(err)
+		log.Panic(err)
 	}
-	assert.Equal(t, "taebin", repo.Name)
+	ets.Equal("taebin", repo.Name)
+}
+
+func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_3_UpdateBIzCardByUid() {
+	repo, err := ets.Client.BizCard.UpdateOneID(1).
+		SetAge(16).
+		SetEmail("test2089").
+		SetName("taebint").
+		Save(context.Background())
+	if err != nil {
+		log.Panic(err)
+	}
+	ets.Equal(16, repo.Age)
+	ets.Equal("test2089", repo.Email)
+	ets.Equal("taebint", repo.Name)
+}
+
+func TestExampleTestSuite(t *testing.T) {
+	suite.Run(t, new(BizCardRepositoryTestSuite))
 }

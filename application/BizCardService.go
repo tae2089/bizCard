@@ -10,6 +10,7 @@ import (
 type BizCardService interface {
 	RegisterBizCard(bizCardDto *domain.BizCardRegister) *domain.BizCardInfo
 	FindBizCard(uid int) *domain.BizCardInfo
+	UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo
 }
 
 var onceBizCardService sync.Once

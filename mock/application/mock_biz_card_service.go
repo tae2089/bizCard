@@ -44,3 +44,19 @@ func (_m *MockBizCardService) RegisterBizCard(bizCardDto *domain.BizCardRegister
 
 	return r0
 }
+
+// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate
+func (_m *MockBizCardService) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo {
+	ret := _m.Called(uid, bizCardUpdate)
+
+	var r0 *domain.BizCardInfo
+	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate) *domain.BizCardInfo); ok {
+		r0 = rf(uid, bizCardUpdate)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.BizCardInfo)
+		}
+	}
+
+	return r0
+}

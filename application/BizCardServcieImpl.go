@@ -31,3 +31,18 @@ func (b *BizCardServiceImpl) FindBizCard(uid int) *domain.BizCardInfo {
 	bizCardInfo := domain.CreateBizCardInfo(bizCard)
 	return &bizCardInfo
 }
+
+func (b *BizCardServiceImpl) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo {
+	findBizCard, err := b.BizCardRepository.FindBIzCardByUid(uid)
+	if err != nil {
+		log.Println("not found bizcard")
+		return nil
+	}
+	updateBizCard, err := b.BizCardRepository.UpdateBizCard(findBizCard, bizCardUpdate)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	bizCardInfo := domain.CreateBizCardInfo(updateBizCard)
+	return &bizCardInfo
+}
