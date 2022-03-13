@@ -26,8 +26,8 @@ type BizCard struct {
 	Age int `json:"age,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BizCardQuery when eager-loading is set.
-	Edges          BizCardEdges `json:"edges"`
-	user_biz_cards *int
+	Edges   BizCardEdges `json:"edges"`
+	user_id *int
 }
 
 // BizCardEdges holds the relations/edges for other nodes in the graph.
@@ -62,7 +62,7 @@ func (*BizCard) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case bizcard.FieldName, bizcard.FieldPhoneNumber, bizcard.FieldEmail:
 			values[i] = new(sql.NullString)
-		case bizcard.ForeignKeys[0]: // user_biz_cards
+		case bizcard.ForeignKeys[0]: // user_id
 			values[i] = new(sql.NullInt64)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type BizCard", columns[i])
@@ -111,10 +111,10 @@ func (bc *BizCard) assignValues(columns []string, values []interface{}) error {
 			}
 		case bizcard.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field user_biz_cards", value)
+				return fmt.Errorf("unexpected type %T for edge-field user_id", value)
 			} else if value.Valid {
-				bc.user_biz_cards = new(int)
-				*bc.user_biz_cards = int(value.Int64)
+				bc.user_id = new(int)
+				*bc.user_id = int(value.Int64)
 			}
 		}
 	}

@@ -27,7 +27,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "bizcard" package.
 	BizCardsInverseTable = "biz_cards"
 	// BizCardsColumn is the table column denoting the biz_cards relation/edge.
-	BizCardsColumn = "user_biz_cards"
+	BizCardsColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.

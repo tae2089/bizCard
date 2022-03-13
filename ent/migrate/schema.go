@@ -15,7 +15,7 @@ var (
 		{Name: "phone_number", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "user_biz_cards", Type: field.TypeInt, Nullable: true},
+		{Name: "user_id", Type: field.TypeInt, Nullable: true},
 	}
 	// BizCardsTable holds the schema information for the "biz_cards" table.
 	BizCardsTable = &schema.Table{

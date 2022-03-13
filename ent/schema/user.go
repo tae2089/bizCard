@@ -25,6 +25,6 @@ func (User) Fields() []ent.Field {
 // Edges of the User.
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("biz_cards", BizCard.Type),
+		edge.To("biz_cards", BizCard.Type).StorageKey(edge.Column("user_id")),
 	}
 }
