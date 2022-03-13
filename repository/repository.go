@@ -12,6 +12,7 @@ import (
 )
 
 var BizCardRepositoryBean BizCardRepository
+var UserRepositoryBean UserRepository
 var Client *ent.Client
 var onceEnt sync.Once
 
@@ -37,6 +38,7 @@ func OpenDB() *ent.Client {
 func RegisterRepositoryBeans() {
 	OpenDB()
 	CreateSchema()
+	SetupUserRepository()
 	SetupBizCardRepository()
 }
 
