@@ -52,6 +52,11 @@ func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_3_UpdateBIzCard
 	ets.Equal("taebint", repo.Name)
 }
 
+func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_4_DeleteBIzCardByUid() {
+	err := ets.Client.BizCard.DeleteOneID(1).Exec(context.Background())
+	ets.Nil(err)
+}
+
 func TestExampleTestSuite(t *testing.T) {
 	suite.Run(t, new(BizCardRepositoryTestSuite))
 }

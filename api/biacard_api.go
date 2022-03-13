@@ -11,12 +11,16 @@ import (
 
 func RegisterBizCard(c *gin.Context) {
 	var dto domain.BizCardRegister
+	result := domain.Success()
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		result = domain.Fail()
+		result.Data = err.Error()
+		c.JSON(http.StatusInternalServerError, result)
 		return
 	}
 	log.Println("111", dto)
-	result := application.BizCardServiceBean.RegisterBizCard(&dto)
+	data := application.BizCardServiceBean.RegisterBizCard(&dto)
+	result.Data = data
 	log.Println("d", result)
 
 	c.JSON(http.StatusOK, result)
@@ -25,19 +29,26 @@ func RegisterBizCard(c *gin.Context) {
 func FindBizCard(c *gin.Context) {
 	uid := c.Param("uid")
 	intUid, err := strconv.Atoi(uid)
+	result := domain.Success()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		result = domain.Fail()
+		result.Data = err.Error()
+		c.JSON(http.StatusInternalServerError, result)
 		return
 	}
-	result := application.BizCardServiceBean.FindBizCard(intUid)
+	data := application.BizCardServiceBean.FindBizCard(intUid)
+	result.Data = data
 	c.JSON(http.StatusOK, result)
 }
 
 func UpdateBizCard(c *gin.Context) {
 	uid := c.Param("uid")
 	intUid, err := strconv.Atoi(uid)
+	result := domain.Success()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		result = domain.Fail()
+		result.Data = err.Error()
+		c.JSON(http.StatusInternalServerError, result)
 		return
 	}
 	var update domain.BizCardUpdate
@@ -45,6 +56,22 @@ func UpdateBizCard(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	result := application.BizCardServiceBean.UpdateBizCard(intUid, &update)
+	data := application.BizCardServiceBean.UpdateBizCard(intUid, &update)
+	result.Data = data
+	c.JSON(http.StatusOK, result)
+}
+
+func DeleteBizCard(c *gin.Context) {
+	uid := c.Param("uid")
+	intUid, err := strconv.Atoi(uid)
+	result := domain.Success()
+	if err != nil {
+		result = domain.Fail()
+		result.Data = err.Error()
+		c.JSON(http.StatusInternalServerError, result)
+		return
+	}
+	data := application.BizCardServiceBean.DeleteBizCard(intUid)
+	result.Data = data
 	c.JSON(http.StatusOK, result)
 }

@@ -14,10 +14,17 @@ func SetupRouter() *gin.Engine {
 			"message": "pong",
 		})
 	})
-	router.POST("/register", api.RegisterBizCard)
-	router.GET("/:uid", api.FindBizCard)
-	router.PUT("/:uid", api.UpdateBizCard)
+	bizcard := router.Group("/bizcard")
+	bizcard = SetupBizCardApi(bizcard)
 	return router
+}
+
+func SetupBizCardApi(group *gin.RouterGroup) *gin.RouterGroup {
+	group.POST("/register", api.RegisterBizCard)
+	group.GET("/:uid", api.FindBizCard)
+	group.PUT("/:uid", api.UpdateBizCard)
+	group.DELETE("/:uid", api.DeleteBizCard)
+	return group
 }
 
 func SetupService() {

@@ -78,6 +78,18 @@ func (ets *BizCardServiceTestSuite) TestBizCardServiceImpl_UpdateBizCard_SavedEr
 	ets.Nil(result)
 }
 
+func (ets *BizCardServiceTestSuite) TestBizCardServiceImpl_DeleteBizCard() {
+	ets.BizCardRepository.On("DeleteBizCardByUid", mock.AnythingOfType("int")).Return(nil)
+	result := ets.BizCardService.DeleteBizCard(1)
+	ets.Equal("success", result)
+}
+
+func (ets *BizCardServiceTestSuite) TestBizCardServiceImpl_DeleteBizCard_error() {
+	ets.BizCardRepository.On("DeleteBizCardByUid", mock.AnythingOfType("int")).Return(errors.New("fail"))
+	result := ets.BizCardService.DeleteBizCard(1)
+	ets.Equal("fail", result)
+}
+
 func TestExampleTestSuite(t *testing.T) {
 	suite.Run(t, new(BizCardServiceTestSuite))
 }
