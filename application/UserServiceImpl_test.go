@@ -5,6 +5,7 @@ import (
 	"bizCard/domain"
 	"bizCard/ent"
 	mockrepo "bizCard/mock/repository"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"testing"
 	"time"
@@ -35,7 +36,9 @@ func (ets *UserServiceTestSuite) SetupTest() {
 	ets.UserService = &application.UserServiceImpl{UserRepository: &ets.UserRepository}
 }
 func (ets *UserServiceTestSuite) TestUserServiceImpl_RegisterUser(t *testing.T) {
-
+	ets.UserRepository.On("RegisterUser", mock.Anything).Return(ets.User)
+	result := ets.UserService.RegisterUser(ets.UserRegister)
+	ets.Equal("tester", result.Name)
 }
 
 func TestUserServiceTestSuite(t *testing.T) {
