@@ -101,10 +101,10 @@ func TestBizCardUpdate(t *testing.T) {
 		PhoneNumber: "010-xxxx-xxxx",
 		Age:         25,
 	}
-	b := domain.CreateBizCardUpdate(data)
-	b = b.Update(&domain.BizCardUpdate{
+	bizCard := domain.CreateBizCardUpdate(data)
+	bizCard.Update(&domain.BizCardUpdate{
 		Name: "tester",
 		Age:  100,
 	})
-	assert.Equal(t, 100, b.Age)
+	assert.Equal(t, 100, bizCard.Age)
 }
