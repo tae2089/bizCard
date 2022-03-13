@@ -7,6 +7,8 @@ import (
 	"context"
 )
 
+var _ BizCardRepository = (*BizCardRepositoryImpl)(nil)
+
 type BizCardRepositoryImpl struct {
 	Client *ent.BizCardClient
 }
