@@ -59,37 +59,46 @@ func (ets *BizCardApiTestSuite) SetupTest() {
 
 func (ets *BizCardApiTestSuite) TestRegisterBizCard() {
 	ets.BizCardService.On("RegisterBizCard", mock.Anything).Return(ets.BizCardInfo)
-	ets.E.POST("/register").
+	ets.E.POST("/bizcard/register").
 		WithHeader("Content-Type", "application/json").
-		WithJSON(ets.Data).Expect().
+		WithJSON(ets.Data).
+		Expect().
+		Status(200).
 		JSON().
-		Object().
-		ContainsKey("name").
-		ValueEqual("name", "taebin")
+		Path("$.Data.name").Equal("taebin")
 }
 
 func (ets *BizCardApiTestSuite) TestFindBizCard() {
 
 	ets.BizCardService.On("FindBizCard", mock.Anything).Return(ets.BizCardInfo)
-	ets.E.GET("/1").
+	ets.E.GET("/bizcard/1").
 		WithHeader("Content-Type", "application/json").
 		Expect().
+		Status(200).
 		JSON().
-		Object().
-		ContainsKey("name").
-		ValueEqual("name", "taebin")
+		Path("$.Data.name").Equal("taebin")
+
 }
 
 func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 	ets.BizCardInfo.Age = 26
 	ets.BizCardService.On("UpdateBizCard", mock.AnythingOfType("int"), mock.Anything).Return(ets.BizCardInfo)
-	ets.E.PUT("/1").
+	ets.E.PUT("/bizcard/1").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).Expect().
+		Status(200).
 		JSON().
-		Object().
-		ContainsKey("age").
-		ValueEqual("age", 26)
+		Path("$.Data.name").Equal("taebin")
+}
+
+func (ets *BizCardApiTestSuite) TestDeleteBizCard() {
+	ets.BizCardService.On("DeleteBizCard", mock.AnythingOfType("int")).Return("success")
+	ets.E.DELETE("/bizcard/1").
+		WithHeader("Content-Type", "application/json").
+		WithJSON(ets.Data).Expect().
+		Status(200).
+		JSON().
+		Path("$.Data").Equal("success")
 }
 
 func TestExampleTestSuite(t *testing.T) {
