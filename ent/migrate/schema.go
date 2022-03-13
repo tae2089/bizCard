@@ -15,18 +15,44 @@ var (
 		{Name: "phone_number", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
+		{Name: "user_biz_cards", Type: field.TypeInt, Nullable: true},
 	}
 	// BizCardsTable holds the schema information for the "biz_cards" table.
 	BizCardsTable = &schema.Table{
 		Name:       "biz_cards",
 		Columns:    BizCardsColumns,
 		PrimaryKey: []*schema.Column{BizCardsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "biz_cards_users_biz_cards",
+				Columns:    []*schema.Column{BizCardsColumns[5]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// UsersColumns holds the columns for the "users" table.
+	UsersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "created_date", Type: field.TypeTime},
+		{Name: "modified_date", Type: field.TypeTime},
+		{Name: "password", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString},
+	}
+	// UsersTable holds the schema information for the "users" table.
+	UsersTable = &schema.Table{
+		Name:       "users",
+		Columns:    UsersColumns,
+		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		BizCardsTable,
+		UsersTable,
 	}
 )
 
 func init() {
+	BizCardsTable.ForeignKeys[0].RefTable = UsersTable
 }

@@ -5,6 +5,7 @@ package ent
 import (
 	"bizCard/ent/bizcard"
 	"bizCard/ent/predicate"
+	"bizCard/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -58,9 +59,34 @@ func (bcu *BizCardUpdate) AddAge(i int) *BizCardUpdate {
 	return bcu
 }
 
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (bcu *BizCardUpdate) SetOwnerID(id int) *BizCardUpdate {
+	bcu.mutation.SetOwnerID(id)
+	return bcu
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (bcu *BizCardUpdate) SetNillableOwnerID(id *int) *BizCardUpdate {
+	if id != nil {
+		bcu = bcu.SetOwnerID(*id)
+	}
+	return bcu
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (bcu *BizCardUpdate) SetOwner(u *User) *BizCardUpdate {
+	return bcu.SetOwnerID(u.ID)
+}
+
 // Mutation returns the BizCardMutation object of the builder.
 func (bcu *BizCardUpdate) Mutation() *BizCardMutation {
 	return bcu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the User entity.
+func (bcu *BizCardUpdate) ClearOwner() *BizCardUpdate {
+	bcu.mutation.ClearOwner()
+	return bcu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -186,6 +212,41 @@ func (bcu *BizCardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: bizcard.FieldAge,
 		})
 	}
+	if bcu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bizcard.OwnerTable,
+			Columns: []string{bizcard.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bcu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bizcard.OwnerTable,
+			Columns: []string{bizcard.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bcu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{bizcard.Label}
@@ -236,9 +297,34 @@ func (bcuo *BizCardUpdateOne) AddAge(i int) *BizCardUpdateOne {
 	return bcuo
 }
 
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (bcuo *BizCardUpdateOne) SetOwnerID(id int) *BizCardUpdateOne {
+	bcuo.mutation.SetOwnerID(id)
+	return bcuo
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (bcuo *BizCardUpdateOne) SetNillableOwnerID(id *int) *BizCardUpdateOne {
+	if id != nil {
+		bcuo = bcuo.SetOwnerID(*id)
+	}
+	return bcuo
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (bcuo *BizCardUpdateOne) SetOwner(u *User) *BizCardUpdateOne {
+	return bcuo.SetOwnerID(u.ID)
+}
+
 // Mutation returns the BizCardMutation object of the builder.
 func (bcuo *BizCardUpdateOne) Mutation() *BizCardMutation {
 	return bcuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the User entity.
+func (bcuo *BizCardUpdateOne) ClearOwner() *BizCardUpdateOne {
+	bcuo.mutation.ClearOwner()
+	return bcuo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -387,6 +473,41 @@ func (bcuo *BizCardUpdateOne) sqlSave(ctx context.Context) (_node *BizCard, err 
 			Value:  value,
 			Column: bizcard.FieldAge,
 		})
+	}
+	if bcuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bizcard.OwnerTable,
+			Columns: []string{bizcard.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bcuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bizcard.OwnerTable,
+			Columns: []string{bizcard.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &BizCard{config: bcuo.config}
 	_spec.Assign = _node.assignValues
