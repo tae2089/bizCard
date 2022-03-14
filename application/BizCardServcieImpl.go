@@ -39,7 +39,7 @@ func (b *BizCardServiceImpl) UpdateBizCard(uid int, dto *domain.BizCardUpdate) *
 		return nil
 	}
 	bizCardUpdate := domain.CreateBizCardUpdate(findBizCard)
-	bizCardUpdate = bizCardUpdate.Update(dto)
+	bizCardUpdate.Update(dto)
 	updateBizCard, err := b.BizCardRepository.UpdateBizCard(findBizCard.ID, bizCardUpdate)
 	if err != nil {
 		log.Println(err)

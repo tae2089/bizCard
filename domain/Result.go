@@ -1,9 +1,9 @@
 package domain
 
 type Result struct {
-	Message    string
-	StatusCode int
-	Data       interface{}
+	Message    string      `form:"message" json:"message"`
+	StatusCode int         `form:"statusCode" json:"statusCode"`
+	Data       interface{} `form:"data" json:"data"`
 }
 
 func Success() *Result {

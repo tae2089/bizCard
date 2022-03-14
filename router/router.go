@@ -15,19 +15,24 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	bizcard := router.Group("/bizcard")
-	bizcard = SetupBizCardApi(bizcard)
+	user := router.Group("/user")
+	SetupBizCardApi(bizcard)
+	SetupUserApi(user)
 	return router
 }
 
-func SetupBizCardApi(group *gin.RouterGroup) *gin.RouterGroup {
+func SetupBizCardApi(group *gin.RouterGroup) {
 	group.POST("/register", api.RegisterBizCard)
 	group.GET("/:uid", api.FindBizCard)
 	group.PUT("/:uid", api.UpdateBizCard)
 	group.DELETE("/:uid", api.DeleteBizCard)
-	return group
+}
+
+func SetupUserApi(group *gin.RouterGroup) {
+	group.POST("/register", api.RegisterUser)
 }
 
 func SetupService() {
 	repository.RegisterRepositoryBeans()
-	application.SetupBizCardService()
+	application.RegisterServiceBeans()
 }

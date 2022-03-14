@@ -65,7 +65,7 @@ func (ets *BizCardApiTestSuite) TestRegisterBizCard() {
 		Expect().
 		Status(200).
 		JSON().
-		Path("$.Data.name").Equal("taebin")
+		Path("$.data.name").Equal("taebin")
 }
 
 func (ets *BizCardApiTestSuite) TestFindBizCard() {
@@ -76,7 +76,7 @@ func (ets *BizCardApiTestSuite) TestFindBizCard() {
 		Expect().
 		Status(200).
 		JSON().
-		Path("$.Data.name").Equal("taebin")
+		Path("$.data.name").Equal("taebin")
 
 }
 
@@ -88,7 +88,7 @@ func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 		WithJSON(ets.Data).Expect().
 		Status(200).
 		JSON().
-		Path("$.Data.name").Equal("taebin")
+		Path("$.data.name").Equal("taebin")
 }
 
 func (ets *BizCardApiTestSuite) TestDeleteBizCard() {
@@ -98,7 +98,7 @@ func (ets *BizCardApiTestSuite) TestDeleteBizCard() {
 		WithJSON(ets.Data).Expect().
 		Status(200).
 		JSON().
-		Path("$.Data").Equal("success")
+		Path("$.data").Equal("success")
 }
 
 func TestExampleTestSuite(t *testing.T) {

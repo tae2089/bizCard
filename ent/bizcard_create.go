@@ -4,6 +4,7 @@ package ent
 
 import (
 	"bizCard/ent/bizcard"
+	"bizCard/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -41,6 +42,25 @@ func (bcc *BizCardCreate) SetEmail(s string) *BizCardCreate {
 func (bcc *BizCardCreate) SetAge(i int) *BizCardCreate {
 	bcc.mutation.SetAge(i)
 	return bcc
+}
+
+// SetOwnerID sets the "owner" edge to the User entity by ID.
+func (bcc *BizCardCreate) SetOwnerID(id int) *BizCardCreate {
+	bcc.mutation.SetOwnerID(id)
+	return bcc
+}
+
+// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
+func (bcc *BizCardCreate) SetNillableOwnerID(id *int) *BizCardCreate {
+	if id != nil {
+		bcc = bcc.SetOwnerID(*id)
+	}
+	return bcc
+}
+
+// SetOwner sets the "owner" edge to the User entity.
+func (bcc *BizCardCreate) SetOwner(u *User) *BizCardCreate {
+	return bcc.SetOwnerID(u.ID)
 }
 
 // Mutation returns the BizCardMutation object of the builder.
@@ -188,6 +208,26 @@ func (bcc *BizCardCreate) createSpec() (*BizCard, *sqlgraph.CreateSpec) {
 			Column: bizcard.FieldAge,
 		})
 		_node.Age = value
+	}
+	if nodes := bcc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   bizcard.OwnerTable,
+			Columns: []string{bizcard.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_id = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
