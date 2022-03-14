@@ -18,3 +18,16 @@ func RegisterUser(c *gin.Context) {
 	result.Data = data
 	c.JSON(200, result)
 }
+
+func LoginUser(c *gin.Context) {
+	var userLoginForm domain.UserLoginForm
+	result := domain.Success()
+	if err := c.ShouldBind(&userLoginForm); err != nil {
+		result = domain.Fail()
+		result.Data = err
+		c.JSON(500, result)
+	}
+	data := application.UserServiceBean.LoginUser(userLoginForm)
+	result.Data = data
+	c.JSON(200, result)
+}
