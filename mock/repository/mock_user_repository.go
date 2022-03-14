@@ -14,6 +14,27 @@ type MockUserRepository struct {
 	mock.Mock
 }
 
+// FindUser provides a mock function with given fields: email
+func (_m *MockUserRepository) FindUser(email string) (ent.User, error) {
+	ret := _m.Called(email)
+
+	var r0 ent.User
+	if rf, ok := ret.Get(0).(func(string) ent.User); ok {
+		r0 = rf(email)
+	} else {
+		r0 = ret.Get(0).(ent.User)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(email)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // RegisterUser provides a mock function with given fields: userRegister
 func (_m *MockUserRepository) RegisterUser(userRegister domain.UserRegister) (*ent.User, error) {
 	ret := _m.Called(userRegister)
