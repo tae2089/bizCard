@@ -11,6 +11,7 @@ var userRepositoryOnce sync.Once
 //go:generate mockery --name UserRepository --case underscore --inpackage
 type UserRepository interface {
 	RegisterUser(userRegister domain.UserRegister) (*ent.User, error)
+	FindUser(email string) (ent.User, error)
 }
 
 func SetupUserRepository() UserRepository {
