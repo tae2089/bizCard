@@ -11,6 +11,7 @@ var userServiceOnce sync.Once
 //go:generate mockery --name UserService --case underscore --inpackage
 type UserService interface {
 	RegisterUser(userRegister domain.UserRegister) domain.UserInfo
+	LoginUser(loginForm domain.UserLoginForm) domain.UserInfo
 }
 
 func SetupUserService() UserService {
