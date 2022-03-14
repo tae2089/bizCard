@@ -30,6 +30,7 @@ func SetupBizCardApi(group *gin.RouterGroup) {
 
 func SetupUserApi(group *gin.RouterGroup) {
 	group.POST("/register", api.RegisterUser)
+	group.POST("/login", api.LoginUser)
 }
 
 func SetupService() {
