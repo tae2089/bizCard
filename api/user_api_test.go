@@ -74,6 +74,17 @@ func (ets *UserApiTestSuite) TestRegisterUser() {
 		Path("$.data.name").Equal("test")
 }
 
+func (ets *UserApiTestSuite) TestLoginUser() {
+	ets.UserService.On("LoginUser", mock.Anything).Return(ets.UserInfo, 1)
+	ets.E.POST("/user/login").
+		WithHeader("Content-Type", "application/json").
+		WithJSON(ets.Data).
+		Expect().
+		Status(200).
+		JSON().
+		Path("$.data.name").Equal("test")
+}
+
 func TestUserApiTestSuite(t *testing.T) {
 	suite.Run(t, new(UserApiTestSuite))
 }
