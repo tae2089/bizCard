@@ -43,25 +43,29 @@ func (ets *UserServiceTestSuite) TestUserServiceImpl_RegisterUser() {
 
 func (ets *UserServiceTestSuite) TestUserServiceImpl_FindUser() {
 	ets.UserRepository.On("FindUser", mock.Anything).Return(ent.User{
+		ID:           1,
 		Name:         "tester",
 		Email:        "test@example.com",
 		Password:     "$2a$10$9DbcpPw2hfYmqzYtQIp3t.nA.YBFPIB7jGbD87AbKrCGg/BoP7B.i",
 		CreatedDate:  time.Now(),
 		ModifiedDate: time.Now(),
 	}, nil)
-	result := ets.UserService.LoginUser(domain.UserLoginForm{Email: "test@example.com", Password: "hello01"})
+	result, id := ets.UserService.LoginUser(domain.UserLoginForm{Email: "test@example.com", Password: "hello01"})
+	ets.Equal(id, 1)
 	ets.Equal(result.Name, "tester")
 }
 
 func (ets *UserServiceTestSuite) TestUserServiceImpl_NotFindUser() {
 	ets.UserRepository.On("FindUser", mock.Anything).Return(ent.User{
+		ID:           1,
 		Name:         "tester",
 		Email:        "test@example.com",
 		Password:     "$2a$10$9DbcpPw2hfYmqzYtQIp3t.nA.YBFPIB7jGbD87AbKrCGg/BoP7B.i",
 		CreatedDate:  time.Now(),
 		ModifiedDate: time.Now(),
 	}, nil)
-	result := ets.UserService.LoginUser(domain.UserLoginForm{Email: "test@example.com", Password: "hello02"})
+	result, id := ets.UserService.LoginUser(domain.UserLoginForm{Email: "test@example.com", Password: "hello02"})
+	ets.Equal(id, 0)
 	ets.Equal(result.Present, false)
 }
 
