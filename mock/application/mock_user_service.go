@@ -14,7 +14,7 @@ type MockUserService struct {
 }
 
 // LoginUser provides a mock function with given fields: loginForm
-func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm) domain.UserInfo {
+func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm) (domain.UserInfo, int) {
 	ret := _m.Called(loginForm)
 
 	var r0 domain.UserInfo
@@ -24,7 +24,14 @@ func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm) domain.User
 		r0 = ret.Get(0).(domain.UserInfo)
 	}
 
-	return r0
+	var r1 int
+	if rf, ok := ret.Get(1).(func(domain.UserLoginForm) int); ok {
+		r1 = rf(loginForm)
+	} else {
+		r1 = ret.Get(1).(int)
+	}
+
+	return r0, r1
 }
 
 // RegisterUser provides a mock function with given fields: userRegister
