@@ -75,7 +75,7 @@ func (ets *UserApiTestSuite) TestRegisterUser() {
 }
 
 func (ets *UserApiTestSuite) TestLoginUser() {
-	ets.UserService.On("LoginUser", mock.Anything).Return(ets.UserInfo)
+	ets.UserService.On("LoginUser", mock.Anything).Return(ets.UserInfo, 1)
 	ets.E.POST("/user/login").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).
