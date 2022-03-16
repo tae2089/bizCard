@@ -3,6 +3,7 @@ package api
 import (
 	"bizCard/application"
 	"bizCard/domain"
+	"bizCard/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +28,14 @@ func LoginUser(c *gin.Context) {
 		result.Data = err
 		c.JSON(500, result)
 	}
-	data := application.UserServiceBean.LoginUser(userLoginForm)
+	data, id := application.UserServiceBean.LoginUser(userLoginForm)
+	token, err := util.CreateJwt(data, id)
+	if err != nil {
+		result = domain.Fail()
+		result.Data = err
+		c.JSON(500, result)
+	}
+	c.SetCookie("accessToken", token, 60*60*24, "/", "localhost", true, true)
 	result.Data = data
 	c.JSON(200, result)
 }
