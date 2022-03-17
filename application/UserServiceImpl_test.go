@@ -5,6 +5,7 @@ import (
 	"bizCard/domain"
 	"bizCard/ent"
 	mockrepo "bizCard/mock/repository"
+	"errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -36,9 +37,17 @@ func (ets *UserServiceTestSuite) SetupTest() {
 	ets.UserService = &application.UserServiceImpl{UserRepository: &ets.UserRepository}
 }
 func (ets *UserServiceTestSuite) TestUserServiceImpl_RegisterUser() {
+	ets.UserRepository.On("FindUser", mock.AnythingOfType("string")).Return(ent.User{Email: ""}, errors.New("user not found"))
 	ets.UserRepository.On("RegisterUser", mock.Anything).Return(ets.User, nil)
 	result := ets.UserService.RegisterUser(ets.UserRegister)
 	ets.Equal("tester", result.Name)
+}
+
+func (ets *UserServiceTestSuite) TestUserServiceImpl_RegisterUser_Email_Exist() {
+	ets.UserRepository.On("FindUser", mock.AnythingOfType("string")).Return(ent.User{}, nil)
+	ets.UserRepository.On("RegisterUser", mock.Anything).Return(ets.User, nil)
+	result := ets.UserService.RegisterUser(ets.UserRegister)
+	ets.Equal(false, result.Present)
 }
 
 func (ets *UserServiceTestSuite) TestUserServiceImpl_FindUser() {

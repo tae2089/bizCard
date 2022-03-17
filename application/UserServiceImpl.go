@@ -28,6 +28,13 @@ func (userServiceImpl *UserServiceImpl) LoginUser(loginForm domain.UserLoginForm
 }
 
 func (userServiceImpl *UserServiceImpl) RegisterUser(userRegister domain.UserRegister) domain.UserInfo {
+	_, err := userServiceImpl.UserRepository.FindUser(userRegister.Email)
+	if err == nil {
+		return domain.UserInfo{
+			Present: false,
+		}
+	}
+
 	encryptPassword, err := util.GenerateBcrypt(userRegister.Password)
 	if err != nil {
 		log.Println(err)

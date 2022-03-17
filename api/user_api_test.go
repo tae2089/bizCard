@@ -74,6 +74,15 @@ func (ets *UserApiTestSuite) TestRegisterUser() {
 		Path("$.data.name").Equal("test")
 }
 
+func (ets *UserApiTestSuite) TestRegisterUser_error() {
+	ets.UserService.On("RegisterUser", mock.Anything).Return(domain.UserInfo{Present: false})
+	ets.E.POST("/user/register").
+		WithHeader("Content-Type", "application/json").
+		WithJSON(ets.Data).
+		Expect().
+		Status(500)
+}
+
 func (ets *UserApiTestSuite) TestLoginUser() {
 	ets.UserService.On("LoginUser", mock.Anything).Return(ets.UserInfo, 1)
 	ets.E.POST("/user/login").
@@ -83,6 +92,15 @@ func (ets *UserApiTestSuite) TestLoginUser() {
 		Status(200).
 		JSON().
 		Path("$.data.name").Equal("test")
+}
+
+func (ets *UserApiTestSuite) TestLoginUser_error() {
+	ets.UserService.On("LoginUser", mock.Anything).Return(domain.UserInfo{Present: false}, 0)
+	ets.E.POST("/user/login").
+		WithHeader("Content-Type", "application/json").
+		WithJSON(ets.Data).
+		Expect().
+		Status(500)
 }
 
 func TestUserApiTestSuite(t *testing.T) {

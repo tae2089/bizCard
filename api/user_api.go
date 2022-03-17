@@ -4,6 +4,7 @@ import (
 	"bizCard/application"
 	"bizCard/domain"
 	"bizCard/util"
+	"errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,9 @@ func RegisterUser(c *gin.Context) {
 		c.JSON(500, result)
 	}
 	data := application.UserServiceBean.RegisterUser(userRegister)
+	if data.Present == false {
+		c.JSON(500, errors.New("user register fail"))
+	}
 	result.Data = data
 	c.JSON(200, result)
 }
@@ -29,6 +33,11 @@ func LoginUser(c *gin.Context) {
 		c.JSON(500, result)
 	}
 	data, id := application.UserServiceBean.LoginUser(userLoginForm)
+
+	if data.Present == false {
+		c.JSON(500, errors.New("Login Fail"))
+	}
+
 	token, err := util.CreateJwt(data, id)
 	if err != nil {
 		result = domain.Fail()
