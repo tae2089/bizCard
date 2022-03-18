@@ -24,3 +24,4 @@ go.work
 .idea
 mysql/datadir/**
 .scannerwork
+logging.log
