@@ -4,7 +4,6 @@ import (
 	"bizCard/domain"
 	"bizCard/repository"
 	"bizCard/util"
-	"log"
 )
 
 var _ UserService = (*UserServiceImpl)(nil)
@@ -14,16 +13,18 @@ type UserServiceImpl struct {
 }
 
 func (userServiceImpl *UserServiceImpl) LoginUser(loginForm domain.UserLoginForm) (domain.UserInfo, int) {
+	util.Log.Info("Login User Service start")
 	findUser, err := userServiceImpl.UserRepository.FindUser(loginForm.Email)
 	if err != nil {
-		log.Println(err)
+		util.Log.Error(err.Error())
 		return domain.UserInfo{Present: false}, 0
 	}
 	comparePassword, err := util.Compare(findUser.Password, loginForm.Password)
 	if err != nil || comparePassword == false {
-		log.Println(err)
+		util.Log.Error(err.Error())
 		return domain.UserInfo{Present: false}, 0
 	}
+	util.Log.Info("Login User Service end")
 	return domain.CreateUserInfo(&findUser), findUser.ID
 }
 
@@ -37,7 +38,7 @@ func (userServiceImpl *UserServiceImpl) RegisterUser(userRegister domain.UserReg
 
 	encryptPassword, err := util.GenerateBcrypt(userRegister.Password)
 	if err != nil {
-		log.Println(err)
+		util.Log.Error(err.Error())
 		return domain.UserInfo{
 			Present: false,
 		}
@@ -45,7 +46,7 @@ func (userServiceImpl *UserServiceImpl) RegisterUser(userRegister domain.UserReg
 	userRegister.Password = encryptPassword
 	savedUser, err := userServiceImpl.UserRepository.RegisterUser(userRegister)
 	if err != nil {
-		log.Println(err)
+		util.Log.Error(err.Error())
 		return domain.UserInfo{
 			Present: false,
 		}

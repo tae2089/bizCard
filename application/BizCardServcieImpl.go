@@ -3,6 +3,7 @@ package application
 import (
 	"bizCard/domain"
 	"bizCard/repository"
+	"go.uber.org/zap"
 	"log"
 )
 
@@ -10,6 +11,7 @@ var _ BizCardService = (*BizCardServiceImpl)(nil)
 
 type BizCardServiceImpl struct {
 	BizCardRepository repository.BizCardRepository
+	Log               *zap.Logger
 }
 
 func (b *BizCardServiceImpl) RegisterBizCard(dto *domain.BizCardRegister) *domain.BizCardInfo {

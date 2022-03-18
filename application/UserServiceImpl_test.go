@@ -5,6 +5,7 @@ import (
 	"bizCard/domain"
 	"bizCard/ent"
 	mockrepo "bizCard/mock/repository"
+	"bizCard/util"
 	"errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -21,6 +22,7 @@ type UserServiceTestSuite struct {
 }
 
 func (ets *UserServiceTestSuite) SetupTest() {
+	util.SetupLogging()
 	ets.UserRegister = domain.UserRegister{
 		Name:     "tester",
 		Password: "hello01",

@@ -25,6 +25,7 @@ func RegisterUser(c *gin.Context) {
 }
 
 func LoginUser(c *gin.Context) {
+	util.Log.Info("start logine user api")
 	var userLoginForm domain.UserLoginForm
 	result := domain.Success()
 	if err := c.ShouldBind(&userLoginForm); err != nil {
@@ -46,5 +47,6 @@ func LoginUser(c *gin.Context) {
 	}
 	c.SetCookie("accessToken", token, 60*60*24, "/", "localhost", true, true)
 	result.Data = data
+	util.Log.Info("end logine user api")
 	c.JSON(200, result)
 }
