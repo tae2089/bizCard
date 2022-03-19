@@ -50,3 +50,7 @@ func LoginUser(c *gin.Context) {
 	util.Log.Info("end logine user api")
 	c.JSON(200, result)
 }
+
+func HealthCheck(c *gin.Context) {
+	c.JSON(200, gin.H{"msg": "OK"})
+}
