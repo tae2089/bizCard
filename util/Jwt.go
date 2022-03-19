@@ -2,12 +2,11 @@ package util
 
 import (
 	"bizCard/domain"
-	"fmt"
 	"github.com/golang-jwt/jwt"
 	"time"
 )
 
-var hmacSampleSecret []byte
+var hmacSampleSecret = []byte("secret")
 
 type MyCustomClaims struct {
 	Id int
@@ -30,14 +29,17 @@ func CreateJwt(userInfo domain.UserInfo, userId int) (string, error) {
 
 func ParseJwt(tokenString string) int {
 	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("AllYourBase"), nil
+		return hmacSampleSecret, nil
 	})
 
-	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
-		fmt.Printf("%v %v", claims.Id, claims.StandardClaims.ExpiresAt)
-	} else {
-		fmt.Println(err)
+	if err != nil {
+		return 0
+	}
+	claims, ok := token.Claims.(*MyCustomClaims)
+
+	if !(ok && token.Valid) {
+		return -1
 	}
 
-	return 1
+	return claims.Id
 }
