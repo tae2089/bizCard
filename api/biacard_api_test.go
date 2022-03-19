@@ -7,6 +7,7 @@ import (
 	mockapp "bizCard/mock/application"
 	mockrepo "bizCard/mock/repository"
 	"bizCard/router"
+	"bizCard/util"
 	"github.com/gavv/httpexpect"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -24,6 +25,7 @@ type BizCardApiTestSuite struct {
 	BizCardRepository mockrepo.MockBizCardRepository
 	E                 *httpexpect.Expect
 	Data              map[string]interface{}
+	AccessToken       string
 }
 
 func (ets *BizCardApiTestSuite) SetupTest() {
@@ -54,12 +56,16 @@ func (ets *BizCardApiTestSuite) SetupTest() {
 		"phoneNumber": "010-xxxx-xxxx",
 		"age":         25,
 	}
-
+	ets.AccessToken, _ = util.CreateJwt(domain.UserInfo{
+		Name:  "tae2089",
+		Email: "test@example.com",
+	}, 1)
 }
 
 func (ets *BizCardApiTestSuite) TestRegisterBizCard() {
 	ets.BizCardService.On("RegisterBizCard", mock.Anything).Return(ets.BizCardInfo)
 	ets.E.POST("/bizcard/register").
+		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).
 		Expect().
@@ -72,6 +78,7 @@ func (ets *BizCardApiTestSuite) TestFindBizCard() {
 
 	ets.BizCardService.On("FindBizCard", mock.Anything).Return(ets.BizCardInfo)
 	ets.E.GET("/bizcard/1").
+		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
 		Expect().
 		Status(200).
@@ -84,6 +91,7 @@ func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 	ets.BizCardInfo.Age = 26
 	ets.BizCardService.On("UpdateBizCard", mock.AnythingOfType("int"), mock.Anything).Return(ets.BizCardInfo)
 	ets.E.PUT("/bizcard/1").
+		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).Expect().
 		Status(200).
@@ -94,6 +102,7 @@ func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 func (ets *BizCardApiTestSuite) TestDeleteBizCard() {
 	ets.BizCardService.On("DeleteBizCard", mock.AnythingOfType("int")).Return("success")
 	ets.E.DELETE("/bizcard/1").
+		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).Expect().
 		Status(200).

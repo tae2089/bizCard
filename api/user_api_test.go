@@ -7,6 +7,7 @@ import (
 	mockapp "bizCard/mock/application"
 	mockrepo "bizCard/mock/repository"
 	"bizCard/router"
+	"bizCard/util"
 	"github.com/gavv/httpexpect"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -24,6 +25,7 @@ type UserApiTestSuite struct {
 	UserRepository mockrepo.MockUserRepository
 	E              *httpexpect.Expect
 	Data           map[string]interface{}
+	AccessToken    string
 }
 
 func (ets *UserApiTestSuite) SetupTest() {
@@ -60,7 +62,10 @@ func (ets *UserApiTestSuite) SetupTest() {
 		ModifiedDate: time.Now(),
 		CreatedDate:  time.Now(),
 	}
-
+	ets.AccessToken, _ = util.CreateJwt(domain.UserInfo{
+		Name:  "tae2089",
+		Email: "test@example.com",
+	}, 1)
 }
 
 func (ets *UserApiTestSuite) TestRegisterUser() {
@@ -101,6 +106,14 @@ func (ets *UserApiTestSuite) TestLoginUser_error() {
 		WithJSON(ets.Data).
 		Expect().
 		Status(500)
+}
+
+func (ets *UserApiTestSuite) TestHealthCheck() {
+	ets.E.GET("/user/test").
+		WithCookie("accessToken", ets.AccessToken).
+		WithHeader("Content-Type", "application/json").
+		Expect().
+		Status(200)
 }
 
 func TestUserApiTestSuite(t *testing.T) {
