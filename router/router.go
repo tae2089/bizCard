@@ -3,6 +3,7 @@ package router
 import (
 	"bizCard/api"
 	"bizCard/application"
+	"bizCard/middleware"
 	"bizCard/repository"
 	"bizCard/util"
 	"github.com/gin-gonic/gin"
@@ -17,9 +18,14 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	bizcard := router.Group("/bizcard")
+	bizcard.Use(middleware.CheckJwtToken)
 	user := router.Group("/user")
+	user.Use(middleware.DummyMiddleWare)
+	tokenUser := router.Group("/user")
+	tokenUser.Use(middleware.CheckJwtToken)
 	SetupBizCardApi(bizcard)
 	SetupUserApi(user)
+	SetupTokenUserApi(tokenUser)
 	return router
 }
 
@@ -33,6 +39,10 @@ func SetupBizCardApi(group *gin.RouterGroup) {
 func SetupUserApi(group *gin.RouterGroup) {
 	group.POST("/register", api.RegisterUser)
 	group.POST("/login", api.LoginUser)
+}
+
+func SetupTokenUserApi(group *gin.RouterGroup) {
+	group.GET("/test", api.HealthCheck)
 }
 
 func SetupService() {
