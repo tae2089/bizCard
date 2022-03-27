@@ -14,6 +14,20 @@ type MockBizCardRepository struct {
 	mock.Mock
 }
 
+// DeleteBizCardByUid provides a mock function with given fields: uid
+func (_m *MockBizCardRepository) DeleteBizCardByUid(uid int) error {
+	ret := _m.Called(uid)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(int) error); ok {
+		r0 = rf(uid)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // FindBIzCardByUid provides a mock function with given fields: uid
 func (_m *MockBizCardRepository) FindBIzCardByUid(uid int) (*ent.BizCard, error) {
 	ret := _m.Called(uid)
@@ -60,13 +74,13 @@ func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*
 	return r0, r1
 }
 
-// UpdateBizCard provides a mock function with given fields: findBizCard, dto
-func (_m *MockBizCardRepository) UpdateBizCard(findBizCard *ent.BizCard, dto *domain.BizCardUpdate) (*ent.BizCard, error) {
-	ret := _m.Called(findBizCard, dto)
+// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate
+func (_m *MockBizCardRepository) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) (*ent.BizCard, error) {
+	ret := _m.Called(uid, bizCardUpdate)
 
 	var r0 *ent.BizCard
-	if rf, ok := ret.Get(0).(func(*ent.BizCard, *domain.BizCardUpdate) *ent.BizCard); ok {
-		r0 = rf(findBizCard, dto)
+	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate) *ent.BizCard); ok {
+		r0 = rf(uid, bizCardUpdate)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.BizCard)
@@ -74,8 +88,8 @@ func (_m *MockBizCardRepository) UpdateBizCard(findBizCard *ent.BizCard, dto *do
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*ent.BizCard, *domain.BizCardUpdate) error); ok {
-		r1 = rf(findBizCard, dto)
+	if rf, ok := ret.Get(1).(func(int, *domain.BizCardUpdate) error); ok {
+		r1 = rf(uid, bizCardUpdate)
 	} else {
 		r1 = ret.Error(1)
 	}

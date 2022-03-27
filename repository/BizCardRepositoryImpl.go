@@ -7,6 +7,8 @@ import (
 	"context"
 )
 
+var _ BizCardRepository = (*BizCardRepositoryImpl)(nil)
+
 type BizCardRepositoryImpl struct {
 	Client *ent.BizCardClient
 }
@@ -30,14 +32,18 @@ func (b *BizCardRepositoryImpl) FindBIzCardByUid(uid int) (*ent.BizCard, error) 
 	return bizCard, err
 }
 
-func (b *BizCardRepositoryImpl) UpdateBizCard(findBizCard *ent.BizCard, dto *domain.BizCardUpdate) (*ent.BizCard, error) {
-	bizCardUpdate := domain.CreateBizCardUpdate(findBizCard)
-	bizCardUpdate = bizCardUpdate.Update(dto)
-	bizCard, err := b.Client.UpdateOneID(findBizCard.ID).
+func (b *BizCardRepositoryImpl) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) (*ent.BizCard, error) {
+
+	bizCard, err := b.Client.UpdateOneID(uid).
 		SetAge(bizCardUpdate.Age).
 		SetEmail(bizCardUpdate.Email).
 		SetName(bizCardUpdate.Name).
 		SetPhoneNumber(bizCardUpdate.PhoneNumber).
 		Save(context.Background())
 	return bizCard, err
+}
+
+func (b *BizCardRepositoryImpl) DeleteBizCardByUid(uid int) error {
+	err := b.Client.DeleteOneID(uid).Exec(context.Background())
+	return err
 }

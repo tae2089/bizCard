@@ -5,6 +5,7 @@ package ent
 import (
 	"bizCard/ent/bizcard"
 	"bizCard/ent/predicate"
+	"bizCard/ent/user"
 	"context"
 	"errors"
 	"fmt"
@@ -24,6 +25,9 @@ type BizCardQuery struct {
 	order      []OrderFunc
 	fields     []string
 	predicates []predicate.BizCard
+	// eager-loading edges.
+	withOwner *UserQuery
+	withFKs   bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (bcq *BizCardQuery) Unique(unique bool) *BizCardQuery {
 func (bcq *BizCardQuery) Order(o ...OrderFunc) *BizCardQuery {
 	bcq.order = append(bcq.order, o...)
 	return bcq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (bcq *BizCardQuery) QueryOwner() *UserQuery {
+	query := &UserQuery{config: bcq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(bizcard.Table, bizcard.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, bizcard.OwnerTable, bizcard.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first BizCard entity from the query.
@@ -241,11 +267,23 @@ func (bcq *BizCardQuery) Clone() *BizCardQuery {
 		offset:     bcq.offset,
 		order:      append([]OrderFunc{}, bcq.order...),
 		predicates: append([]predicate.BizCard{}, bcq.predicates...),
+		withOwner:  bcq.withOwner.Clone(),
 		// clone intermediate query.
 		sql:    bcq.sql.Clone(),
 		path:   bcq.path,
 		unique: bcq.unique,
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (bcq *BizCardQuery) WithOwner(opts ...func(*UserQuery)) *BizCardQuery {
+	query := &UserQuery{config: bcq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	bcq.withOwner = query
+	return bcq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -311,9 +349,19 @@ func (bcq *BizCardQuery) prepareQuery(ctx context.Context) error {
 
 func (bcq *BizCardQuery) sqlAll(ctx context.Context) ([]*BizCard, error) {
 	var (
-		nodes = []*BizCard{}
-		_spec = bcq.querySpec()
+		nodes       = []*BizCard{}
+		withFKs     = bcq.withFKs
+		_spec       = bcq.querySpec()
+		loadedTypes = [1]bool{
+			bcq.withOwner != nil,
+		}
 	)
+	if bcq.withOwner != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, bizcard.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		node := &BizCard{config: bcq.config}
 		nodes = append(nodes, node)
@@ -324,6 +372,7 @@ func (bcq *BizCardQuery) sqlAll(ctx context.Context) ([]*BizCard, error) {
 			return fmt.Errorf("ent: Assign called without calling ScanValues")
 		}
 		node := nodes[len(nodes)-1]
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if err := sqlgraph.QueryNodes(ctx, bcq.driver, _spec); err != nil {
@@ -332,6 +381,36 @@ func (bcq *BizCardQuery) sqlAll(ctx context.Context) ([]*BizCard, error) {
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+
+	if query := bcq.withOwner; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*BizCard)
+		for i := range nodes {
+			if nodes[i].user_id == nil {
+				continue
+			}
+			fk := *nodes[i].user_id
+			if _, ok := nodeids[fk]; !ok {
+				ids = append(ids, fk)
+			}
+			nodeids[fk] = append(nodeids[fk], nodes[i])
+		}
+		query.Where(user.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Owner = n
+			}
+		}
+	}
+
 	return nodes, nil
 }
 

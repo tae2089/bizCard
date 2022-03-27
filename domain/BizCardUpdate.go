@@ -2,7 +2,6 @@ package domain
 
 import (
 	"bizCard/ent"
-	"log"
 	"reflect"
 )
 
@@ -22,7 +21,7 @@ func CreateBizCardUpdate(dto *ent.BizCard) *BizCardUpdate {
 	}
 }
 
-func (b *BizCardUpdate) Update(dto *BizCardUpdate) *BizCardUpdate {
+func (b *BizCardUpdate) Update(dto *BizCardUpdate) {
 	e := reflect.ValueOf(dto).Elem()
 	for i := 0; i < e.NumField(); i++ {
 		dtoName := e.Type().Field(i).Name
@@ -30,6 +29,4 @@ func (b *BizCardUpdate) Update(dto *BizCardUpdate) *BizCardUpdate {
 			reflect.ValueOf(b).Elem().FieldByName(dtoName).Set(reflect.ValueOf(dto).Elem().FieldByName(dtoName))
 		}
 	}
-	log.Println(b)
-	return b
 }

@@ -1,7 +1,9 @@
 package application
 
 var BizCardServiceBean BizCardService
+var UserServiceBean UserService
 
-func SetUpAllServiceBean() {
+func RegisterServiceBeans() {
+	SetupUserService()
 	SetupBizCardService()
 }

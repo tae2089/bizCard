@@ -4,6 +4,7 @@ package ent
 
 import (
 	"bizCard/ent/bizcard"
+	"bizCard/ent/user"
 	"errors"
 	"fmt"
 
@@ -30,6 +31,7 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		bizcard.Table: bizcard.ValidColumn,
+		user.Table:    user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

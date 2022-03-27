@@ -3,6 +3,7 @@ package application
 import (
 	"bizCard/domain"
 	"bizCard/repository"
+	"go.uber.org/zap"
 	"log"
 )
 
@@ -10,6 +11,7 @@ var _ BizCardService = (*BizCardServiceImpl)(nil)
 
 type BizCardServiceImpl struct {
 	BizCardRepository repository.BizCardRepository
+	Log               *zap.Logger
 }
 
 func (b *BizCardServiceImpl) RegisterBizCard(dto *domain.BizCardRegister) *domain.BizCardInfo {
@@ -32,17 +34,27 @@ func (b *BizCardServiceImpl) FindBizCard(uid int) *domain.BizCardInfo {
 	return &bizCardInfo
 }
 
-func (b *BizCardServiceImpl) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo {
+func (b *BizCardServiceImpl) UpdateBizCard(uid int, dto *domain.BizCardUpdate) *domain.BizCardInfo {
 	findBizCard, err := b.BizCardRepository.FindBIzCardByUid(uid)
 	if err != nil {
 		log.Println("not found bizcard")
 		return nil
 	}
-	updateBizCard, err := b.BizCardRepository.UpdateBizCard(findBizCard, bizCardUpdate)
+	bizCardUpdate := domain.CreateBizCardUpdate(findBizCard)
+	bizCardUpdate.Update(dto)
+	updateBizCard, err := b.BizCardRepository.UpdateBizCard(findBizCard.ID, bizCardUpdate)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
 	bizCardInfo := domain.CreateBizCardInfo(updateBizCard)
 	return &bizCardInfo
+}
+
+func (b *BizCardServiceImpl) DeleteBizCard(uid int) string {
+	err := b.BizCardRepository.DeleteBizCardByUid(uid)
+	if err != nil {
+		return "fail"
+	}
+	return "success"
 }

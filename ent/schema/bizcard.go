@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -22,5 +23,9 @@ func (BizCard) Fields() []ent.Field {
 
 // Edges of the BizCard.
 func (BizCard) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("owner", User.Type).
+			Ref("biz_cards").
+			Unique(),
+	}
 }

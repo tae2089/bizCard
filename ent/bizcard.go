@@ -4,6 +4,7 @@ package ent
 
 import (
 	"bizCard/ent/bizcard"
+	"bizCard/ent/user"
 	"fmt"
 	"strings"
 
@@ -23,6 +24,33 @@ type BizCard struct {
 	Email string `json:"email,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the BizCardQuery when eager-loading is set.
+	Edges   BizCardEdges `json:"edges"`
+	user_id *int
+}
+
+// BizCardEdges holds the relations/edges for other nodes in the graph.
+type BizCardEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *User `json:"owner,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BizCardEdges) OwnerOrErr() (*User, error) {
+	if e.loadedTypes[0] {
+		if e.Owner == nil {
+			// The edge owner was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.Owner, nil
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -34,6 +62,8 @@ func (*BizCard) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case bizcard.FieldName, bizcard.FieldPhoneNumber, bizcard.FieldEmail:
 			values[i] = new(sql.NullString)
+		case bizcard.ForeignKeys[0]: // user_id
+			values[i] = new(sql.NullInt64)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type BizCard", columns[i])
 		}
@@ -79,9 +109,21 @@ func (bc *BizCard) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				bc.Age = int(value.Int64)
 			}
+		case bizcard.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field user_id", value)
+			} else if value.Valid {
+				bc.user_id = new(int)
+				*bc.user_id = int(value.Int64)
+			}
 		}
 	}
 	return nil
+}
+
+// QueryOwner queries the "owner" edge of the BizCard entity.
+func (bc *BizCard) QueryOwner() *UserQuery {
+	return (&BizCardClient{config: bc.config}).QueryOwner(bc)
 }
 
 // Update returns a builder for updating this BizCard.
