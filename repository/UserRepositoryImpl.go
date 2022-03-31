@@ -5,6 +5,7 @@ import (
 	"bizCard/ent"
 	"bizCard/ent/user"
 	"context"
+	"log"
 	"time"
 )
 
@@ -25,7 +26,9 @@ func (u *UserRepositoryImpl) RegisterUser(userRegister domain.UserRegister) (*en
 	return savedUser, err
 }
 
-func (u *UserRepositoryImpl) FindUser(email string) (ent.User, error) {
+func (u *UserRepositoryImpl) FindUser(email string) (*ent.User, error) {
+
 	findUser, err := u.Client.Query().Where(user.Email(email)).Only(context.Background())
-	return *findUser, err
+	log.Println(err)
+	return findUser, err
 }

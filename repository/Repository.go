@@ -1,14 +1,14 @@
 package repository
 
 import (
+	"ariga.io/sqlcomment"
 	"bizCard/ent"
 	"context"
-	"database/sql"
-	entsql "entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"sync"
-	"time"
 )
 
 var BizCardRepositoryBean BizCardRepository
@@ -25,10 +25,17 @@ func OpenDB() *ent.Client {
 				log.Println(err)
 				Client.Close()
 			}
-			db.SetMaxIdleConns(10)
-			db.SetMaxOpenConns(100)
-			db.SetConnMaxLifetime(time.Hour)
-			drv := entsql.OpenDB("mysql", db)
+			//db.SetMaxIdleConns(10)
+			//db.SetMaxOpenConns(100)
+			//db.SetConnMaxLifetime(time.Hour)
+			//drv := entsql.OpenDB("mysql", db)
+			drv := sqlcomment.NewDriver(dialect.Debug(db),
+				sqlcomment.WithDriverVerTag(),
+				sqlcomment.WithTags(sqlcomment.Tags{
+					sqlcomment.KeyApplication: "my-app",
+					sqlcomment.KeyFramework:   "net/http",
+				}),
+			)
 			Client = ent.NewClient(ent.Driver(drv))
 		})
 	}

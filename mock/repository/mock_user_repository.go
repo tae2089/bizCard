@@ -15,14 +15,16 @@ type MockUserRepository struct {
 }
 
 // FindUser provides a mock function with given fields: email
-func (_m *MockUserRepository) FindUser(email string) (ent.User, error) {
+func (_m *MockUserRepository) FindUser(email string) (*ent.User, error) {
 	ret := _m.Called(email)
 
-	var r0 ent.User
-	if rf, ok := ret.Get(0).(func(string) ent.User); ok {
+	var r0 *ent.User
+	if rf, ok := ret.Get(0).(func(string) *ent.User); ok {
 		r0 = rf(email)
 	} else {
-		r0 = ret.Get(0).(ent.User)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ent.User)
+		}
 	}
 
 	var r1 error
