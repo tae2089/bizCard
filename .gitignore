@@ -25,3 +25,4 @@ go.work
 mysql/datadir/**
 .scannerwork
 logging.log
+*.DS_store
