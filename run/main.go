@@ -2,7 +2,9 @@ package main
 
 import (
 	"bizCard/router"
+	biztrace "bizCard/trace"
 	"context"
+	"go.opentelemetry.io/otel"
 	"log"
 	"net/http"
 	"os"
@@ -11,9 +13,30 @@ import (
 	"time"
 )
 
+var APP_NAME = "bizCard"
+
 func main() {
+	f, err := os.Create("traces.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(f)
+
+	tp := biztrace.Ttt(f)
+	otel.SetTracerProvider(tp)
 	router.SetupService()
 	engine := router.SetupRouter()
+
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			panic(err)
+		}
+	}()
 
 	srv := &http.Server{
 		Addr:    ":8080",
