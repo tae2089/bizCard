@@ -5,6 +5,7 @@ import (
 	"bizCard/ent/bizcard"
 	"bizCard/ent/enttest"
 	"context"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/suite"
 	"log"
 	"testing"
@@ -16,8 +17,9 @@ type BizCardRepositoryTestSuite struct {
 }
 
 func (ets *BizCardRepositoryTestSuite) SetupTest() {
-	ets.Client = enttest.Open(ets.T(), "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true")
+	ets.Client = enttest.Open(ets.T(), "sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
 }
+
 func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_1_RegisterBizCard() {
 	data, err := ets.Client.BizCard.Create().
 		SetAge(15).
@@ -57,6 +59,6 @@ func (ets *BizCardRepositoryTestSuite) TestBizCardRepositoryImpl_4_DeleteBIzCard
 	ets.Nil(err)
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestBizCardTestSuite(t *testing.T) {
 	suite.Run(t, new(BizCardRepositoryTestSuite))
 }

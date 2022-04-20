@@ -11,7 +11,6 @@ import (
 	"github.com/gavv/httpexpect"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"log"
 	"net/http"
 	"testing"
 )
@@ -30,7 +29,6 @@ type BizCardApiTestSuite struct {
 
 func (ets *BizCardApiTestSuite) SetupTest() {
 	handler := router.SetupRouter()
-	log.Println("111", ets.T())
 	ets.BizCardService = mockapp.MockBizCardService{}
 	application.BizCardServiceBean = &ets.BizCardService
 
@@ -63,7 +61,7 @@ func (ets *BizCardApiTestSuite) SetupTest() {
 }
 
 func (ets *BizCardApiTestSuite) TestRegisterBizCard() {
-	ets.BizCardService.On("RegisterBizCard", mock.Anything).Return(ets.BizCardInfo)
+	ets.BizCardService.On("RegisterBizCard", mock.Anything, mock.Anything).Return(ets.BizCardInfo)
 	ets.E.POST("/bizcard/register").
 		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
@@ -76,7 +74,7 @@ func (ets *BizCardApiTestSuite) TestRegisterBizCard() {
 
 func (ets *BizCardApiTestSuite) TestFindBizCard() {
 
-	ets.BizCardService.On("FindBizCard", mock.Anything).Return(ets.BizCardInfo)
+	ets.BizCardService.On("FindBizCard", mock.Anything, mock.Anything).Return(ets.BizCardInfo)
 	ets.E.GET("/bizcard/1").
 		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
@@ -89,7 +87,7 @@ func (ets *BizCardApiTestSuite) TestFindBizCard() {
 
 func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 	ets.BizCardInfo.Age = 26
-	ets.BizCardService.On("UpdateBizCard", mock.AnythingOfType("int"), mock.Anything).Return(ets.BizCardInfo)
+	ets.BizCardService.On("UpdateBizCard", mock.AnythingOfType("int"), mock.Anything, mock.Anything).Return(ets.BizCardInfo)
 	ets.E.PUT("/bizcard/1").
 		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").
@@ -100,7 +98,7 @@ func (ets *BizCardApiTestSuite) TestUpdateBizCard() {
 }
 
 func (ets *BizCardApiTestSuite) TestDeleteBizCard() {
-	ets.BizCardService.On("DeleteBizCard", mock.AnythingOfType("int")).Return("success")
+	ets.BizCardService.On("DeleteBizCard", mock.AnythingOfType("int"), mock.Anything).Return("success")
 	ets.E.DELETE("/bizcard/1").
 		WithCookie("accessToken", ets.AccessToken).
 		WithHeader("Content-Type", "application/json").

@@ -69,7 +69,7 @@ func (ets *UserApiTestSuite) SetupTest() {
 }
 
 func (ets *UserApiTestSuite) TestRegisterUser() {
-	ets.UserService.On("RegisterUser", mock.Anything).Return(ets.UserInfo)
+	ets.UserService.On("RegisterUser", mock.Anything, mock.Anything).Return(ets.UserInfo)
 	ets.E.POST("/user/register").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).
@@ -80,7 +80,7 @@ func (ets *UserApiTestSuite) TestRegisterUser() {
 }
 
 func (ets *UserApiTestSuite) TestRegisterUser_error() {
-	ets.UserService.On("RegisterUser", mock.Anything).Return(domain.UserInfo{Present: false})
+	ets.UserService.On("RegisterUser", mock.Anything, mock.Anything).Return(domain.UserInfo{Present: false})
 	ets.E.POST("/user/register").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).
@@ -89,7 +89,7 @@ func (ets *UserApiTestSuite) TestRegisterUser_error() {
 }
 
 func (ets *UserApiTestSuite) TestLoginUser() {
-	ets.UserService.On("LoginUser", mock.Anything).Return(ets.UserInfo, 1)
+	ets.UserService.On("LoginUser", mock.Anything, mock.Anything).Return(ets.UserInfo, 1)
 	ets.E.POST("/user/login").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).
@@ -100,7 +100,7 @@ func (ets *UserApiTestSuite) TestLoginUser() {
 }
 
 func (ets *UserApiTestSuite) TestLoginUser_error() {
-	ets.UserService.On("LoginUser", mock.Anything).Return(domain.UserInfo{Present: false}, 0)
+	ets.UserService.On("LoginUser", mock.Anything, mock.Anything).Return(domain.UserInfo{Present: false}, 0)
 	ets.E.POST("/user/login").
 		WithHeader("Content-Type", "application/json").
 		WithJSON(ets.Data).

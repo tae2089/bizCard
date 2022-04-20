@@ -6,6 +6,7 @@ import (
 	"bizCard/ent/user"
 	"bizCard/util"
 	"context"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/suite"
 	"log"
 	"testing"
@@ -18,7 +19,8 @@ type UserRepositoryTestSuite struct {
 }
 
 func (ets *UserRepositoryTestSuite) SetupTest() {
-	ets.Client = enttest.Open(ets.T(), "mysql", "root:secret@tcp(localhost:13306)/bizcardtest?parseTime=true").User
+
+	ets.Client = enttest.Open(ets.T(), "sqlite3", "file:ent?mode=memory&cache=shared&_fk=1").User
 }
 func (ets *UserRepositoryTestSuite) TestUserRepositoryImpl_1_RegisterUser() {
 	password, err := util.GenerateBcrypt("hello01")
