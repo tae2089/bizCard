@@ -25,10 +25,6 @@ func OpenDB() *ent.Client {
 				log.Println(err)
 				Client.Close()
 			}
-			//db.SetMaxIdleConns(10)
-			//db.SetMaxOpenConns(100)
-			//db.SetConnMaxLifetime(time.Hour)
-			//drv := entsql.OpenDB("mysql", db)
 			drv := sqlcomment.NewDriver(dialect.Debug(db),
 				sqlcomment.WithDriverVerTag(),
 				sqlcomment.WithTags(sqlcomment.Tags{

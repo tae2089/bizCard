@@ -3,6 +3,7 @@ package repository
 import (
 	"bizCard/domain"
 	"bizCard/ent"
+	"context"
 	"log"
 	"sync"
 )
@@ -11,8 +12,8 @@ var userRepositoryOnce sync.Once
 
 //go:generate mockery --name UserRepository --case underscore --inpackage
 type UserRepository interface {
-	RegisterUser(userRegister domain.UserRegister) (*ent.User, error)
-	FindUser(email string) (*ent.User, error)
+	RegisterUser(userRegister domain.UserRegister, ctx context.Context) (*ent.User, error)
+	FindUser(email string, ctx context.Context) (*ent.User, error)
 }
 
 func SetupUserRepository() UserRepository {

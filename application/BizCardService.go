@@ -3,15 +3,16 @@ package application
 import (
 	"bizCard/domain"
 	"bizCard/repository"
+	"context"
 	"sync"
 )
 
 //go:generate mockery --name BizCardService --case underscore --inpackage
 type BizCardService interface {
-	RegisterBizCard(bizCardDto *domain.BizCardRegister) *domain.BizCardInfo
-	FindBizCard(uid int) *domain.BizCardInfo
-	UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo
-	DeleteBizCard(uid int) string
+	RegisterBizCard(bizCardDto *domain.BizCardRegister, ctx context.Context) *domain.BizCardInfo
+	FindBizCard(uid int, ctx context.Context) *domain.BizCardInfo
+	UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate, ctx context.Context) *domain.BizCardInfo
+	DeleteBizCard(uid int, ctx context.Context) string
 }
 
 var onceBizCardService sync.Once
