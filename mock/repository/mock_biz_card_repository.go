@@ -4,6 +4,8 @@ package repository
 
 import (
 	domain "bizCard/domain"
+	context "context"
+
 	ent "bizCard/ent"
 
 	mock "github.com/stretchr/testify/mock"
@@ -14,13 +16,13 @@ type MockBizCardRepository struct {
 	mock.Mock
 }
 
-// DeleteBizCardByUid provides a mock function with given fields: uid
-func (_m *MockBizCardRepository) DeleteBizCardByUid(uid int) error {
-	ret := _m.Called(uid)
+// DeleteBizCardByUid provides a mock function with given fields: uid, ctx
+func (_m *MockBizCardRepository) DeleteBizCardByUid(uid int, ctx context.Context) error {
+	ret := _m.Called(uid, ctx)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(int) error); ok {
-		r0 = rf(uid)
+	if rf, ok := ret.Get(0).(func(int, context.Context) error); ok {
+		r0 = rf(uid, ctx)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -28,13 +30,13 @@ func (_m *MockBizCardRepository) DeleteBizCardByUid(uid int) error {
 	return r0
 }
 
-// FindBIzCardByUid provides a mock function with given fields: uid
-func (_m *MockBizCardRepository) FindBIzCardByUid(uid int) (*ent.BizCard, error) {
-	ret := _m.Called(uid)
+// FindBIzCardByUid provides a mock function with given fields: uid, ctx
+func (_m *MockBizCardRepository) FindBIzCardByUid(uid int, ctx context.Context) (*ent.BizCard, error) {
+	ret := _m.Called(uid, ctx)
 
 	var r0 *ent.BizCard
-	if rf, ok := ret.Get(0).(func(int) *ent.BizCard); ok {
-		r0 = rf(uid)
+	if rf, ok := ret.Get(0).(func(int, context.Context) *ent.BizCard); ok {
+		r0 = rf(uid, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.BizCard)
@@ -42,8 +44,8 @@ func (_m *MockBizCardRepository) FindBIzCardByUid(uid int) (*ent.BizCard, error)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int) error); ok {
-		r1 = rf(uid)
+	if rf, ok := ret.Get(1).(func(int, context.Context) error); ok {
+		r1 = rf(uid, ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -51,13 +53,13 @@ func (_m *MockBizCardRepository) FindBIzCardByUid(uid int) (*ent.BizCard, error)
 	return r0, r1
 }
 
-// RegisterBizCard provides a mock function with given fields: dto
-func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*ent.BizCard, error) {
-	ret := _m.Called(dto)
+// RegisterBizCard provides a mock function with given fields: dto, ctx
+func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister, ctx context.Context) (*ent.BizCard, error) {
+	ret := _m.Called(dto, ctx)
 
 	var r0 *ent.BizCard
-	if rf, ok := ret.Get(0).(func(*domain.BizCardRegister) *ent.BizCard); ok {
-		r0 = rf(dto)
+	if rf, ok := ret.Get(0).(func(*domain.BizCardRegister, context.Context) *ent.BizCard); ok {
+		r0 = rf(dto, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.BizCard)
@@ -65,8 +67,8 @@ func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*domain.BizCardRegister) error); ok {
-		r1 = rf(dto)
+	if rf, ok := ret.Get(1).(func(*domain.BizCardRegister, context.Context) error); ok {
+		r1 = rf(dto, ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -74,13 +76,13 @@ func (_m *MockBizCardRepository) RegisterBizCard(dto *domain.BizCardRegister) (*
 	return r0, r1
 }
 
-// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate
-func (_m *MockBizCardRepository) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) (*ent.BizCard, error) {
-	ret := _m.Called(uid, bizCardUpdate)
+// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate, ctx
+func (_m *MockBizCardRepository) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate, ctx context.Context) (*ent.BizCard, error) {
+	ret := _m.Called(uid, bizCardUpdate, ctx)
 
 	var r0 *ent.BizCard
-	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate) *ent.BizCard); ok {
-		r0 = rf(uid, bizCardUpdate)
+	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate, context.Context) *ent.BizCard); ok {
+		r0 = rf(uid, bizCardUpdate, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.BizCard)
@@ -88,8 +90,8 @@ func (_m *MockBizCardRepository) UpdateBizCard(uid int, bizCardUpdate *domain.Bi
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int, *domain.BizCardUpdate) error); ok {
-		r1 = rf(uid, bizCardUpdate)
+	if rf, ok := ret.Get(1).(func(int, *domain.BizCardUpdate, context.Context) error); ok {
+		r1 = rf(uid, bizCardUpdate, ctx)
 	} else {
 		r1 = ret.Error(1)
 	}

@@ -4,6 +4,8 @@ package repository
 
 import (
 	domain "bizCard/domain"
+	context "context"
+
 	ent "bizCard/ent"
 
 	mock "github.com/stretchr/testify/mock"
@@ -14,13 +16,13 @@ type MockUserRepository struct {
 	mock.Mock
 }
 
-// FindUser provides a mock function with given fields: email
-func (_m *MockUserRepository) FindUser(email string) (*ent.User, error) {
-	ret := _m.Called(email)
+// FindUser provides a mock function with given fields: email, ctx
+func (_m *MockUserRepository) FindUser(email string, ctx context.Context) (*ent.User, error) {
+	ret := _m.Called(email, ctx)
 
 	var r0 *ent.User
-	if rf, ok := ret.Get(0).(func(string) *ent.User); ok {
-		r0 = rf(email)
+	if rf, ok := ret.Get(0).(func(string, context.Context) *ent.User); ok {
+		r0 = rf(email, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.User)
@@ -28,8 +30,8 @@ func (_m *MockUserRepository) FindUser(email string) (*ent.User, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(email)
+	if rf, ok := ret.Get(1).(func(string, context.Context) error); ok {
+		r1 = rf(email, ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -37,13 +39,13 @@ func (_m *MockUserRepository) FindUser(email string) (*ent.User, error) {
 	return r0, r1
 }
 
-// RegisterUser provides a mock function with given fields: userRegister
-func (_m *MockUserRepository) RegisterUser(userRegister domain.UserRegister) (*ent.User, error) {
-	ret := _m.Called(userRegister)
+// RegisterUser provides a mock function with given fields: userRegister, ctx
+func (_m *MockUserRepository) RegisterUser(userRegister domain.UserRegister, ctx context.Context) (*ent.User, error) {
+	ret := _m.Called(userRegister, ctx)
 
 	var r0 *ent.User
-	if rf, ok := ret.Get(0).(func(domain.UserRegister) *ent.User); ok {
-		r0 = rf(userRegister)
+	if rf, ok := ret.Get(0).(func(domain.UserRegister, context.Context) *ent.User); ok {
+		r0 = rf(userRegister, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*ent.User)
@@ -51,8 +53,8 @@ func (_m *MockUserRepository) RegisterUser(userRegister domain.UserRegister) (*e
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(domain.UserRegister) error); ok {
-		r1 = rf(userRegister)
+	if rf, ok := ret.Get(1).(func(domain.UserRegister, context.Context) error); ok {
+		r1 = rf(userRegister, ctx)
 	} else {
 		r1 = ret.Error(1)
 	}

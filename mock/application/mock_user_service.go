@@ -4,6 +4,7 @@ package application
 
 import (
 	domain "bizCard/domain"
+	context "context"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -13,20 +14,20 @@ type MockUserService struct {
 	mock.Mock
 }
 
-// LoginUser provides a mock function with given fields: loginForm
-func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm) (domain.UserInfo, int) {
-	ret := _m.Called(loginForm)
+// LoginUser provides a mock function with given fields: loginForm, ctx
+func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm, ctx context.Context) (domain.UserInfo, int) {
+	ret := _m.Called(loginForm, ctx)
 
 	var r0 domain.UserInfo
-	if rf, ok := ret.Get(0).(func(domain.UserLoginForm) domain.UserInfo); ok {
-		r0 = rf(loginForm)
+	if rf, ok := ret.Get(0).(func(domain.UserLoginForm, context.Context) domain.UserInfo); ok {
+		r0 = rf(loginForm, ctx)
 	} else {
 		r0 = ret.Get(0).(domain.UserInfo)
 	}
 
 	var r1 int
-	if rf, ok := ret.Get(1).(func(domain.UserLoginForm) int); ok {
-		r1 = rf(loginForm)
+	if rf, ok := ret.Get(1).(func(domain.UserLoginForm, context.Context) int); ok {
+		r1 = rf(loginForm, ctx)
 	} else {
 		r1 = ret.Get(1).(int)
 	}
@@ -34,13 +35,13 @@ func (_m *MockUserService) LoginUser(loginForm domain.UserLoginForm) (domain.Use
 	return r0, r1
 }
 
-// RegisterUser provides a mock function with given fields: userRegister
-func (_m *MockUserService) RegisterUser(userRegister domain.UserRegister) domain.UserInfo {
-	ret := _m.Called(userRegister)
+// RegisterUser provides a mock function with given fields: userRegister, ctx
+func (_m *MockUserService) RegisterUser(userRegister domain.UserRegister, ctx context.Context) domain.UserInfo {
+	ret := _m.Called(userRegister, ctx)
 
 	var r0 domain.UserInfo
-	if rf, ok := ret.Get(0).(func(domain.UserRegister) domain.UserInfo); ok {
-		r0 = rf(userRegister)
+	if rf, ok := ret.Get(0).(func(domain.UserRegister, context.Context) domain.UserInfo); ok {
+		r0 = rf(userRegister, ctx)
 	} else {
 		r0 = ret.Get(0).(domain.UserInfo)
 	}

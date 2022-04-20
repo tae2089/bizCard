@@ -4,6 +4,7 @@ package application
 
 import (
 	domain "bizCard/domain"
+	context "context"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -13,13 +14,13 @@ type MockBizCardService struct {
 	mock.Mock
 }
 
-// DeleteBizCard provides a mock function with given fields: uid
-func (_m *MockBizCardService) DeleteBizCard(uid int) string {
-	ret := _m.Called(uid)
+// DeleteBizCard provides a mock function with given fields: uid, ctx
+func (_m *MockBizCardService) DeleteBizCard(uid int, ctx context.Context) string {
+	ret := _m.Called(uid, ctx)
 
 	var r0 string
-	if rf, ok := ret.Get(0).(func(int) string); ok {
-		r0 = rf(uid)
+	if rf, ok := ret.Get(0).(func(int, context.Context) string); ok {
+		r0 = rf(uid, ctx)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
@@ -27,13 +28,13 @@ func (_m *MockBizCardService) DeleteBizCard(uid int) string {
 	return r0
 }
 
-// FindBizCard provides a mock function with given fields: uid
-func (_m *MockBizCardService) FindBizCard(uid int) *domain.BizCardInfo {
-	ret := _m.Called(uid)
+// FindBizCard provides a mock function with given fields: uid, ctx
+func (_m *MockBizCardService) FindBizCard(uid int, ctx context.Context) *domain.BizCardInfo {
+	ret := _m.Called(uid, ctx)
 
 	var r0 *domain.BizCardInfo
-	if rf, ok := ret.Get(0).(func(int) *domain.BizCardInfo); ok {
-		r0 = rf(uid)
+	if rf, ok := ret.Get(0).(func(int, context.Context) *domain.BizCardInfo); ok {
+		r0 = rf(uid, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*domain.BizCardInfo)
@@ -43,13 +44,13 @@ func (_m *MockBizCardService) FindBizCard(uid int) *domain.BizCardInfo {
 	return r0
 }
 
-// RegisterBizCard provides a mock function with given fields: bizCardDto
-func (_m *MockBizCardService) RegisterBizCard(bizCardDto *domain.BizCardRegister) *domain.BizCardInfo {
-	ret := _m.Called(bizCardDto)
+// RegisterBizCard provides a mock function with given fields: bizCardDto, ctx
+func (_m *MockBizCardService) RegisterBizCard(bizCardDto *domain.BizCardRegister, ctx context.Context) *domain.BizCardInfo {
+	ret := _m.Called(bizCardDto, ctx)
 
 	var r0 *domain.BizCardInfo
-	if rf, ok := ret.Get(0).(func(*domain.BizCardRegister) *domain.BizCardInfo); ok {
-		r0 = rf(bizCardDto)
+	if rf, ok := ret.Get(0).(func(*domain.BizCardRegister, context.Context) *domain.BizCardInfo); ok {
+		r0 = rf(bizCardDto, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*domain.BizCardInfo)
@@ -59,13 +60,13 @@ func (_m *MockBizCardService) RegisterBizCard(bizCardDto *domain.BizCardRegister
 	return r0
 }
 
-// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate
-func (_m *MockBizCardService) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate) *domain.BizCardInfo {
-	ret := _m.Called(uid, bizCardUpdate)
+// UpdateBizCard provides a mock function with given fields: uid, bizCardUpdate, ctx
+func (_m *MockBizCardService) UpdateBizCard(uid int, bizCardUpdate *domain.BizCardUpdate, ctx context.Context) *domain.BizCardInfo {
+	ret := _m.Called(uid, bizCardUpdate, ctx)
 
 	var r0 *domain.BizCardInfo
-	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate) *domain.BizCardInfo); ok {
-		r0 = rf(uid, bizCardUpdate)
+	if rf, ok := ret.Get(0).(func(int, *domain.BizCardUpdate, context.Context) *domain.BizCardInfo); ok {
+		r0 = rf(uid, bizCardUpdate, ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*domain.BizCardInfo)
